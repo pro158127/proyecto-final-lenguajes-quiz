@@ -30,8 +30,9 @@ Los escenarios manuales P1–P7 deben registrarse en la tabla de pruebas del roa
 ## Equipo
 
 - Jordan Amezquita (`@amezquitaJordan`): frontend.
-- Cristian David Sánchez Mosquera (`@pro158127`): dominio, API y pruebas.
-- Daniel Rueda (`@Danielrvasq`): persistencia Supabase y pruebas compartidas.
+- Cristian David Sánchez Mosquera (`@pro158127`): dominio, API y pruebas unitarias (implementación en PR #16).
+- Daniel Rueda (`@Danielrvasq`): conexión/configuración Supabase, clasificación, pruebas manuales P1–P7 y despliegue.
+- Jordan mantiene toda la implementación del frontend.
 
 ## Documentación
 

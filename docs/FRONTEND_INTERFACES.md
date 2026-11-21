@@ -101,9 +101,9 @@ sequenceDiagram
 ## Responsabilidad por módulo
 
 - Jordan: estructura visual, estados anteriores, navegación con teclado y viewport estrecho; conectar los controles usando un cliente API sin lógica de puntuación.
-- Cristian: contratos HTTP, validación de entradas y dominio; el servidor determina acierto y puntaje.
-- Daniel: persistencia, clasificación y orden de resultados.
-- Todos: revisar el flujo completo contra RF1–RF7 y los escenarios P1–P7 antes de cerrar las issues.
+- Cristian: dominio, Route Handlers, contrato HTTP y pruebas unitarias ya preparados en el PR #16. Apoya la integración si aparecen desajustes entre UI y API.
+- Daniel: aplicar la migración/configurar Supabase, verificar persistencia y clasificación, liderar pruebas P1–P7 y despliegue Vercel. Jordan apoya la ejecución de los escenarios que requieren pantallas.
+- Jordan: conserva la implementación completa del frontend y conecta sus controles con estas rutas.
 
 ## Contexto de integración backend para Jordan
 
@@ -172,4 +172,4 @@ Tras `submitAnswer`, congela la selección y muestra `isCorrect` antes de presen
 
 ### Qué está pendiente para cerrar el backend
 
-El código y los contratos están preparados, pero aún falta aplicar `supabase/migrations/20261121000000_quiz_schema.sql` al proyecto Supabase del equipo, configurar `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY`, y comprobar creación/respuesta/ranking contra esa instancia real. También falta enlazar Vercel y poner allí las variables. Este entorno no tiene esas credenciales ni el proyecto enlazado, así que no se afirma que el despliegue ni la persistencia remota estén verificados.
+Responsable de completar esta fase: Daniel. Falta aplicar `supabase/migrations/20261121000000_quiz_schema.sql` al proyecto Supabase del equipo, configurar `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY`, comprobar creación/respuesta/ranking contra esa instancia real y enlazar Vercel con sus variables. Este entorno no tiene esas credenciales ni el proyecto enlazado, así que no se afirma que el despliegue ni la persistencia remota estén verificados.

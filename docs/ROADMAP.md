@@ -7,8 +7,8 @@
 | Integrante | Enfoque principal | Responsabilidades |
 |---|---|---|
 | Jordan Amezquita (`@amezquitaJordan`) | Frontend Next.js | Inicio/alias, preguntas y avance, resultado, clasificación, teclado y ventana estrecha; integración con endpoints. |
-| Cristian David Sánchez Mosquera | API Next.js y pruebas | Modelo y reglas de partida, validación de respuestas, cálculo de puntaje, endpoints y pruebas unitarias. |
-| Daniel Rueda (`@Danielrvasq`) | Persistencia Supabase y pruebas | Esquema y persistencia Supabase, clasificación/desempate, pruebas de integración/manuales, README y despliegue junto al equipo. |
+| Cristian David Sánchez Mosquera (`@pro158127`) | Backend completado en PR #16 | Dominio, Route Handlers, contrato de API y pruebas unitarias. Continúa con soporte de integración cuando Supabase quede configurado. |
+| Daniel Rueda (`@Danielrvasq`) | Supabase, pruebas y despliegue | Aplicar y verificar la migración, conectar persistencia/clasificación, liderar P1–P7 y configurar variables/despliegue en Vercel. |
 
 El reparto es una asignación inicial. El equipo debe acordar revisiones cruzadas y registrar cada aporte real en los commits y README.
 
@@ -38,16 +38,16 @@ El Project incluye campos de selección **Módulo** y **Fase** para filtrar las 
 | Implementar entidad Pregunta | Dominio | Cristian | Opción se evalúa correctamente y estructura del banco queda validada. |
 | Implementar entidad Partida y control de respuesta única | Dominio | Cristian | Estado inicia en cero, secuencia válida y pregunta no se puntúa dos veces. |
 | Implementar cálculo y resumen final | Dominio | Cristian | Aciertos, errores y score derivan de respuestas; casos 0 y 100 correctos. |
-| Crear tabla y restricciones de resultados en Supabase | Persistencia | Tercer integrante | Esquema, validaciones, clave de idempotencia y acceso documentados. |
-| Implementar repositorio Supabase de partidas | Persistencia | Tercer integrante | Insertar una finalización y manejar errores sin ocultar fallo. |
-| Implementar consulta de top cinco | Persistencia | Tercer integrante | Orden score desc, creación asc, límite cinco; lista vacía funciona. |
-| Implementar Route Handlers Next.js | Integración | Cristian + Daniel | Crear/recuperar partida, responder y consultar clasificación cumplen `CONTRATOS_API.md`. |
+| Aplicar y verificar el esquema Supabase de resultados y sesiones | Persistencia | Daniel | Esquema, validaciones, clave de idempotencia y acceso documentados. |
+| Verificar repositorio Supabase de partidas | Persistencia | Daniel | Insertar una finalización y manejar errores sin ocultar fallo. |
+| Verificar clasificación top cinco y desempates en Supabase | Persistencia | Daniel | Orden score desc, creación asc, límite cinco; lista vacía funciona. |
+| Implementar Route Handlers Next.js | Integración | Cristian (terminado en PR #16) | Crear/recuperar partida, responder y consultar clasificación cumplen `CONTRATOS_API.md`. |
 | Construir vistas frontend | Interfaz | Jordan | Rutas `/`, `/game/{gameId}`, `/result/{gameId}` y `/leaderboard` implementadas según `FRONTEND_INTERFACES.md`; teclado, ventana estrecha y estados completos. |
-| Conectar frontend con endpoints | Integración | Jordan + Cristian | Cada control llama la ruta especificada en `FRONTEND_INTERFACES.md`; feedback aparece antes de avanzar y el cliente no calcula puntaje. |
+| Conectar frontend con endpoints | Integración | Jordan | Cada control llama la ruta especificada en `FRONTEND_INTERFACES.md`; feedback aparece antes de avanzar y el cliente no calcula puntaje. |
 | Escribir pruebas unitarias U1–U3 | Pruebas | Cristian | Se ejecutan con Node.js sin navegador y cubren acierto, error y duplicado. |
-| Registrar ejecución de P1–P7 | Pruebas | Tercer integrante + Jordan | Cada escenario indica datos, resultado esperado y resultado observado. |
-| Verificar fallos Supabase y preservación de historial | Pruebas | Tercer integrante | Casos de lectura/escritura fallidos no muestran éxito ni borran datos. |
-| Configurar variables y desplegar en Vercel | Despliegue | Cristian + tercer integrante | Preview/producción disponible con secretos solo en entorno seguro. |
+| Registrar y liderar ejecución de P1–P7 | Pruebas | Daniel; Jordan apoya las verificaciones de interfaz | Cada escenario indica datos, resultado esperado y resultado observado. |
+| Verificar fallos Supabase y preservación de historial | Pruebas | Daniel | Casos de lectura/escritura fallidos no muestran éxito ni borran datos. |
+| Configurar variables y desplegar en Vercel | Despliegue | Daniel | Preview/producción disponible con secretos solo en entorno seguro. |
 | Completar README y ZIP de entrega | Entrega | Todo el equipo; Jordan integra | Incluye integrantes/aportes, tema, setup, pruebas, datos, paradigma y ZIP sin dependencias. |
 | Preparar demostración y explicación individual | Entrega | Todo el equipo | Demo cubre partida, dato inválido, persistencia, tests y una decisión por integrante. |
 
