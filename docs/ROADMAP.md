@@ -6,9 +6,9 @@
 
 | Integrante | Enfoque principal | Responsabilidades |
 |---|---|---|
-| Jordan Amesqueta | Frontend Next.js | Inicio/alias, preguntas y avance, resultado, clasificación, teclado y ventana estrecha; integración con endpoints. |
+| Jordan Amezquita (`@amezquitaJordan`) | Frontend Next.js | Inicio/alias, preguntas y avance, resultado, clasificación, teclado y ventana estrecha; integración con endpoints. |
 | Cristian David Sánchez Mosquera | API Next.js y pruebas | Modelo y reglas de partida, validación de respuestas, cálculo de puntaje, endpoints y pruebas unitarias. |
-| Tercer integrante (nombre pendiente) | Backend y pruebas | Esquema y persistencia Supabase, clasificación/desempate, pruebas de integración/manuales, README y despliegue junto al equipo. |
+| Daniel Rueda (`@Danielrvasq`) | Persistencia Supabase y pruebas | Esquema y persistencia Supabase, clasificación/desempate, pruebas de integración/manuales, README y despliegue junto al equipo. |
 
 El reparto es una asignación inicial. El equipo debe acordar revisiones cruzadas y registrar cada aporte real en los commits y README.
 
@@ -16,7 +16,7 @@ El reparto es una asignación inicial. El equipo debe acordar revisiones cruzada
 
 | Fechas | Fase | Salida verificable |
 |---|---|---|
-| 21–22 nov. | Inicio y definición | Repositorio, tema elegido, diez preguntas, arquitectura revisada y pantallas bosquejadas. |
+| 21–22 nov. | Inicio y definición | Repositorio, tema elegido, banco fuente de 37 regionalismos, selección fija de diez y pantallas bosquejadas. |
 | 23–24 nov. | Dominio y reglas | Alias, `Pregunta`, `Partida`, respuestas únicas y reglas de puntaje implementadas y probables en aislamiento. |
 | 25–26 nov. | Recorrido jugable | Interfaz conectada al backend; se completa partida desde inicio hasta resumen. |
 | 27–28 nov. | Persistencia y clasificación | Supabase conectado; partida final guardada una vez; historial y top cinco con desempate correctos. |
@@ -33,7 +33,7 @@ El Project incluye campos de selección **Módulo** y **Fase** para filtrar las 
 |---|---|---|---|
 | Validar tema y selección fija de diez preguntas | Inicio | Todo el equipo | Banco fuente de 37 preguntas y selección fija de 10 IDs disponibles; todas las preguntas seleccionadas tienen cuatro opciones y respuesta correcta verificada. |
 | Inicializar repositorio, README y reglas de colaboración | Inicio | Cristian + todo el equipo | Instrucciones, estructura y política de commits revisadas. |
-| Diseñar flujo y vistas accesibles | Interfaz | Jordan | Inicio, juego, resumen y clasificación bosquejados; campos etiquetados y flujo de teclado definido. |
+| Diseñar flujo y vistas accesibles | Interfaz | Jordan | Cuatro rutas y estados definidos en `FRONTEND_INTERFACES.md`; llamadas API mapeadas por acción, campos etiquetados y flujo de teclado definido. |
 | Implementar validación de alias y banco | Dominio | Cristian | Reglas RF-01/RF-03 cubiertas y errores claros. |
 | Implementar entidad Pregunta | Dominio | Cristian | Opción se evalúa correctamente y estructura del banco queda validada. |
 | Implementar entidad Partida y control de respuesta única | Dominio | Cristian | Estado inicia en cero, secuencia válida y pregunta no se puntúa dos veces. |
@@ -41,9 +41,9 @@ El Project incluye campos de selección **Módulo** y **Fase** para filtrar las 
 | Crear tabla y restricciones de resultados en Supabase | Persistencia | Tercer integrante | Esquema, validaciones, clave de idempotencia y acceso documentados. |
 | Implementar repositorio Supabase de partidas | Persistencia | Tercer integrante | Insertar una finalización y manejar errores sin ocultar fallo. |
 | Implementar consulta de top cinco | Persistencia | Tercer integrante | Orden score desc, creación asc, límite cinco; lista vacía funciona. |
-| Implementar endpoints Node.js | Integración | Cristian + tercer integrante | Inicio/respuesta/resumen/clasificación validan entradas y responden contratos acordados. |
-| Construir vistas frontend | Interfaz | Jordan | Flujo completo, responsive estrecho, estados de carga/error y teclado básico. |
-| Conectar frontend con endpoints | Integración | Jordan + Cristian | Partida end-to-end sin lógica de puntaje confiada al cliente. |
+| Implementar Route Handlers Next.js | Integración | Cristian + Daniel | Crear/recuperar partida, responder y consultar clasificación cumplen `CONTRATOS_API.md`. |
+| Construir vistas frontend | Interfaz | Jordan | Rutas `/`, `/game/{gameId}`, `/result/{gameId}` y `/leaderboard` implementadas según `FRONTEND_INTERFACES.md`; teclado, ventana estrecha y estados completos. |
+| Conectar frontend con endpoints | Integración | Jordan + Cristian | Cada control llama la ruta especificada en `FRONTEND_INTERFACES.md`; feedback aparece antes de avanzar y el cliente no calcula puntaje. |
 | Escribir pruebas unitarias U1–U3 | Pruebas | Cristian | Se ejecutan con Node.js sin navegador y cubren acierto, error y duplicado. |
 | Registrar ejecución de P1–P7 | Pruebas | Tercer integrante + Jordan | Cada escenario indica datos, resultado esperado y resultado observado. |
 | Verificar fallos Supabase y preservación de historial | Pruebas | Tercer integrante | Casos de lectura/escritura fallidos no muestran éxito ni borran datos. |
@@ -62,4 +62,4 @@ No crear commits vacíos ni dividir artificialmente un mismo cambio para inflar 
 - Elegir el tema antes de llenar el banco definitivo.
 - Usar y mantener `CONTRATOS_API.md` antes de conectar interfaz y Route Handlers.
 - Definir política de acceso de Supabase antes de desplegar.
-- Resolver la identidad GitHub de los tres integrantes para asignar tareas formalmente.
+- Dar acceso de colaborador a Jordan y Daniel para permitir la asignación formal de issues en el repositorio privado.

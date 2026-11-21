@@ -35,6 +35,7 @@ Los escenarios manuales P1–P7 deben registrarse en la tabla de pruebas del roa
 
 ## Documentación
 
+- [Interfaces del frontend y llamadas API](docs/FRONTEND_INTERFACES.md)
 - [Requisitos](docs/REQUISITOS.md)
 - [Arquitectura y módulos](docs/ARQUITECTURA.md)
 - [Contratos de API](docs/CONTRATOS_API.md)

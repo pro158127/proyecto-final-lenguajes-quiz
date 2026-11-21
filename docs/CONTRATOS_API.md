@@ -11,12 +11,12 @@ La interfaz nunca decide el puntaje ni recibe la respuesta correcta antes de env
 | Módulo | Recibe | Devuelve | No debe hacer |
 |---|---|---|---|
 | Interfaz (`app/`, componentes) | Acciones de usuario y respuestas HTTP JSON | Vistas y estados visuales | Consultar Supabase directamente, conocer la respuesta antes de confirmar o calcular el puntaje oficial. |
-| Cliente API (`src/client/api.ts`) | Comandos de interfaz | Tipos de respuesta o error normalizados | Contener secretos o reglas de puntuación. |
-| API Next.js (`app/api/**/route.ts`) | HTTP, parámetros y JSON | Códigos HTTP y DTO JSON | Renderizar interfaz ni duplicar reglas del dominio. |
-| Servicio de partidas (`src/server/games/*`) | Comandos validados y repositorios | Pregunta pública, retroalimentación, resultado | Confiar en score/correctness enviado por el navegador. |
+| Cliente API (`src/client/api-client.js`) | Comandos de interfaz | Tipos de respuesta o error normalizados | Contener secretos o reglas de puntuación. |
+| API Next.js (`app/api/**/route.js`) | HTTP, parámetros y JSON | Códigos HTTP y DTO JSON | Renderizar interfaz ni duplicar reglas del dominio. |
+| Servicio de partidas (`src/server/games/game-service.js`) | Comandos validados y repositorios | Pregunta pública, retroalimentación, resultado | Confiar en score/correctness enviado por el navegador. |
 | Dominio (`src/domain/*`) | Pregunta, opción seleccionada y estado de partida | Decisión correcta/incorrecta, progreso y resultado | Depender de HTTP, React o Supabase. |
 | Repositorio Supabase (`src/server/repositories/*`) | Operaciones tipadas de sesión/resultado | Registros persistidos o errores de datos | Exponer claves privadas o reglas visuales. |
-| Clasificación (`src/server/leaderboard/*`) | Límite solicitado | Lista ordenada de resultados públicos | Devolver datos internos de sesión o respuestas del jugador. |
+| Clasificación (`src/server/leaderboard/leaderboard-service.js`) | Límite solicitado | Lista ordenada de resultados públicos | Devolver datos internos de sesión o respuestas del jugador. |
 
 La comunicación interna es por llamadas de funciones y tipos compartidos, no por HTTP entre módulos del mismo servidor. Solo el navegador consume la API HTTP.
 
@@ -54,15 +54,15 @@ La comunicación interna es por llamadas de funciones y tipos compartidos, no po
   "total": 10,
   "prompt": "Enunciado de ejemplo",
   "options": [
-    { "id": "a", "label": "Opción A" },
-    { "id": "b", "label": "Opción B" },
-    { "id": "c", "label": "Opción C" },
-    { "id": "d", "label": "Opción D" }
+    { "id": "A", "label": "Opción A" },
+    { "id": "B", "label": "Opción B" },
+    { "id": "C", "label": "Opción C" },
+    { "id": "D", "label": "Opción D" }
   ]
 }
 ```
 
-La respuesta correcta no aparece en este objeto. `position` empieza en 1.
+La respuesta correcta no aparece en este objeto. Los IDs de opciones son `A`, `B`, `C` y `D`; `position` empieza en 1.
 
 ### Resultado de partida
 
@@ -94,7 +94,7 @@ La respuesta correcta no aparece en este objeto. `position` empieza en 1.
   "gameId": "game-uuid",
   "status": "IN_PROGRESS",
   "progress": { "answered": 0, "total": 10 },
-  "question": { "id": "q-01", "position": 1, "total": 10, "prompt": "...", "options": [{ "id": "a", "label": "..." }, { "id": "b", "label": "..." }, { "id": "c", "label": "..." }, { "id": "d", "label": "..." }] }
+  "question": { "id": "q-01", "position": 1, "total": 10, "prompt": "...", "options": [{ "id": "A", "label": "..." }, { "id": "B", "label": "..." }, { "id": "C", "label": "..." }, { "id": "D", "label": "..." }] }
 }
 ```
 
@@ -113,7 +113,7 @@ Errores: `404 GAME_NOT_FOUND`, `410 GAME_EXPIRED`. Una sesión incompleta expira
 **Solicitud**
 
 ```json
-{ "questionId": "q-01", "selectedOptionId": "b" }
+{ "questionId": "q-01", "selectedOptionId": "B" }
 ```
 
 **Éxito intermedio: `200 OK`**
@@ -124,9 +124,9 @@ Errores: `404 GAME_NOT_FOUND`, `410 GAME_EXPIRED`. Una sesión incompleta expira
   "status": "IN_PROGRESS",
   "acceptedQuestionId": "q-01",
   "isCorrect": true,
-  "correctOptionId": "b",
+  "correctOptionId": "B",
   "progress": { "answered": 1, "total": 10 },
-  "nextQuestion": { "id": "q-02", "position": 2, "total": 10, "prompt": "...", "options": [{ "id": "a", "label": "..." }, { "id": "b", "label": "..." }, { "id": "c", "label": "..." }, { "id": "d", "label": "..." }] }
+  "nextQuestion": { "id": "q-02", "position": 2, "total": 10, "prompt": "...", "options": [{ "id": "A", "label": "..." }, { "id": "B", "label": "..." }, { "id": "C", "label": "..." }, { "id": "D", "label": "..." }] }
 }
 ```
 

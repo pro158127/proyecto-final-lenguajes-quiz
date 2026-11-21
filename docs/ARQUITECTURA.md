@@ -20,7 +20,10 @@ El backend valida y calcula el puntaje; no confía en un total calculado solo po
 ```text
 .
 ├── app/
-│   ├── page.js                           # Pantalla inicial provisional
+│   ├── page.js                           # Inicio
+│   ├── game/[gameId]/page.js             # Pregunta y retroalimentación
+│   ├── result/[gameId]/page.js           # Resultado final
+│   ├── leaderboard/page.js              # Clasificación
 │   ├── layout.js                         # Layout global
 │   └── api/
 │       ├── games/route.js               # POST crear partida
@@ -28,7 +31,7 @@ El backend valida y calcula el puntaje; no confía en un total calculado solo po
 │       ├── games/[gameId]/answers/route.js # POST confirmar respuesta
 │       └── leaderboard/route.js         # GET top cinco
 ├── components/                          # Componentes de interfaz
-├── docs/                                # Requisitos, arquitectura y contratos
+├── docs/                                # Requisitos, arquitectura, contratos y pantallas
 ├── supabase/migrations/                 # Esquema y funciones transaccionales
 ├── public/                              # Recursos estáticos propios
 ├── src/
@@ -50,7 +53,7 @@ El backend valida y calcula el puntaje; no confía en un total calculado solo po
 └── README.md
 ```
 
-Los Route Handlers usan runtime Node.js. Las páginas/componentes llaman al cliente API; solo el código `src/server` usa credenciales de Supabase. Evitar importar módulos `server` desde componentes de navegador.
+Los Route Handlers usan runtime Node.js. Las páginas/componentes llaman al cliente API definido en [FRONTEND_INTERFACES.md](FRONTEND_INTERFACES.md); solo el código `src/server` usa credenciales de Supabase. Evitar importar módulos `server` desde componentes de navegador.
 
 ## Módulos del proyecto
 
