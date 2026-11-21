@@ -24,8 +24,8 @@ Este repositorio contiene la definición de requisitos, la arquitectura propuest
 
 ## Equipo
 
-- Jordan Amesqueta: frontend.
-- Cristian David Sánchez Mosquera: backend y pruebas.
-- Tercer integrante: nombre pendiente; backend y pruebas.
+- Jordan Amezquita (`@amezquitaJordan`): frontend.
+- Cristian David Sánchez Mosquera (`@pro158127`): backend y pruebas.
+- Daniel Rueda (`@Danielrvasq`): backend y pruebas.
 
-Los nombres de usuario de GitHub de Jordan, Cristian y el tercer integrante están pendientes para poder asignarles formalmente las tareas.
+La asignación formal de Jordan y Daniel a las issues requiere que tengan acceso de colaborador al repositorio privado.
