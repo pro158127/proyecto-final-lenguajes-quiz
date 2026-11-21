@@ -1,74 +1,50 @@
-# Contratos entre módulos y API de Next.js
+# Contrato HTTP del backend Next.js
 
-## Objetivo y decisiones
+## Decisión de arquitectura
 
-Este documento fija cómo viajan los datos entre la interfaz web, los Route Handlers de Next.js, la lógica del juego y Supabase. Next.js se ejecuta sobre Node.js y ofrece la interfaz y la API en el mismo proyecto. Supabase es el único servicio de persistencia.
+El frontend llama al backend del mismo proyecto mediante Route Handlers de **Next.js sobre Node.js**. Los handlers validan HTTP, llaman a servicios/dominio y usan Supabase en el servidor. El navegador nunca llama a Supabase, nunca envía `score` y nunca recibe la respuesta correcta antes de confirmar la pregunta.
 
-La interfaz nunca decide el puntaje ni recibe la respuesta correcta antes de enviar una respuesta. El servidor valida cada acción y la lógica de dominio calcula el resultado. Las rutas de API usan el runtime Node.js de Next.js.
+> La referencia a NestJS se interpreta como Next.js, según la corrección indicada por el equipo. Los endpoints de este documento son Route Handlers de Next.js; no usan NestJS.
 
-## Módulos y contratos internos
+La pantalla y la acción que dispara cada llamada están especificadas en [FRONTEND_INTERFACES.md](FRONTEND_INTERFACES.md).
 
-| Módulo | Recibe | Devuelve | No debe hacer |
-|---|---|---|---|
-| Interfaz (`app/`, componentes) | Acciones de usuario y respuestas HTTP JSON | Vistas y estados visuales | Consultar Supabase directamente, conocer la respuesta antes de confirmar o calcular el puntaje oficial. |
-| Cliente API (`src/client/api-client.js`) | Comandos de interfaz | Tipos de respuesta o error normalizados | Contener secretos o reglas de puntuación. |
-| API Next.js (`app/api/**/route.js`) | HTTP, parámetros y JSON | Códigos HTTP y DTO JSON | Renderizar interfaz ni duplicar reglas del dominio. |
-| Servicio de partidas (`src/server/games/game-service.js`) | Comandos validados y repositorios | Pregunta pública, retroalimentación, resultado | Confiar en score/correctness enviado por el navegador. |
-| Dominio (`src/domain/*`) | Pregunta, opción seleccionada y estado de partida | Decisión correcta/incorrecta, progreso y resultado | Depender de HTTP, React o Supabase. |
-| Repositorio Supabase (`src/server/repositories/*`) | Operaciones tipadas de sesión/resultado | Registros persistidos o errores de datos | Exponer claves privadas o reglas visuales. |
-| Clasificación (`src/server/leaderboard/leaderboard-service.js`) | Límite solicitado | Lista ordenada de resultados públicos | Devolver datos internos de sesión o respuestas del jugador. |
+## Convenciones para el cliente
 
-La comunicación interna es por llamadas de funciones y tipos compartidos, no por HTTP entre módulos del mismo servidor. Solo el navegador consume la API HTTP.
+- Base URL: `/api` en desarrollo y producción; mismo origen que el frontend.
+- Requests con body: `Content-Type: application/json` y `Accept: application/json`.
+- Respuestas: JSON y `Cache-Control: no-store`.
+- Alias enviado por el cliente: 2–20 caracteres después de recortar espacios; el servidor devuelve y guarda el valor normalizado.
+- IDs de pregunta: `q-01` a `q-10`, en el orden fijo de la partida. Estos IDs son posiciones de juego; el banco puede conservar otros IDs internos.
+- IDs de opción: `A`, `B`, `C` o `D`.
+- Las únicas llamadas que necesitan body son `POST /api/games` y `POST /api/games/{gameId}/answers`. `GET` no recibe body. Los endpoints de partida reciben un UUID generado por el servidor en `{gameId}`.
+- El servidor calcula el puntaje a partir de las respuestas confirmadas: +10 por acierto y +0 por error.
 
-## Convenciones HTTP
+## Tipos compartidos
 
-- Base local: `/api`; en producción, el mismo origen del sitio.
-- Formato: `application/json; charset=utf-8`.
-- Alias: se normaliza recortando espacios; debe quedar entre 2 y 20 caracteres.
-- Índices/IDs de pregunta y opción son opacos para el cliente; el cliente envía el ID de opción, no un puntaje.
-- Ninguna respuesta de pregunta incluye `correctOptionId` hasta que la pregunta se haya confirmado.
-- Los errores usan el mismo formato en todas las rutas.
-
-### Error común
+### Pregunta pública
 
 ```json
 {
-  "error": {
-    "code": "INVALID_ALIAS",
-    "message": "Escribe un alias de 2 a 20 caracteres.",
-    "details": { "field": "alias" }
-  }
-}
-```
-
-`details` puede omitirse. Códigos iniciales: `INVALID_ALIAS`, `INVALID_REQUEST`, `INVALID_LIMIT`, `INVALID_ANSWER`, `GAME_NOT_FOUND`, `GAME_EXPIRED`, `QUESTION_OUT_OF_ORDER`, `QUESTION_ALREADY_ANSWERED`, `GAME_ALREADY_COMPLETED`, `STORAGE_UNAVAILABLE`, `INTERNAL_ERROR`.
-
-## Tipos JSON públicos
-
-### Pregunta visible
-
-```json
-{
-  "id": "q-03",
-  "position": 3,
+  "id": "q-01",
+  "position": 1,
   "total": 10,
-  "prompt": "Enunciado de ejemplo",
+  "prompt": "¿Qué significa «parce» en Antioquia?",
   "options": [
-    { "id": "A", "label": "Opción A" },
-    { "id": "B", "label": "Opción B" },
-    { "id": "C", "label": "Opción C" },
-    { "id": "D", "label": "Opción D" }
+    { "id": "A", "label": "Una moneda antigua" },
+    { "id": "B", "label": "Un baile típico" },
+    { "id": "C", "label": "Amigo, compañero o parcero" },
+    { "id": "D", "label": "Un plato de fríjoles" }
   ]
 }
 ```
 
-La respuesta correcta no aparece en este objeto. Los IDs de opciones son `A`, `B`, `C` y `D`; `position` empieza en 1.
+Este objeto **nunca** incluye la respuesta correcta ni la explicación. El handler la agrega a la retroalimentación después de recibir una respuesta válida.
 
-### Resultado de partida
+### Resumen final
 
 ```json
 {
-  "id": "result-uuid",
+  "id": "c5a6eb47-2af8-4d6c-a23b-5619cc362084",
   "alias": "Luna",
   "correctCount": 7,
   "incorrectCount": 3,
@@ -77,98 +53,252 @@ La respuesta correcta no aparece en este objeto. Los IDs de opciones son `A`, `B
 }
 ```
 
-## Endpoints
+Los UUID y la fecha del ejemplo son ilustrativos; el backend genera sus valores.
 
-### 1. Crear partida — `POST /api/games`
+### Error común
 
-**Solicitud**
+```json
+{
+  "error": {
+    "code": "INVALID_ALIAS",
+    "message": "Escribe un alias de 2 a 20 caracteres."
+  }
+}
+```
+
+El cliente muestra `error.message`; no necesita interpretar texto propio del proveedor Supabase.
+
+## Endpoints que consume el frontend
+
+### A. Iniciar partida — `POST /api/games`
+
+**Cuándo:** al pulsar **Iniciar partida** o **Jugar de nuevo**. Cada llamada válida crea una partida nueva.
+
+**Body que envía el frontend**
+
+| Campo | Tipo | Regla |
+|---|---|---|
+| `alias` | string | Obligatorio; 2–20 caracteres después de recortar espacios. |
 
 ```json
 { "alias": "  Luna  " }
 ```
 
-**Éxito: `201 Created`**
+No enviar `gameId`, preguntas, opciones correctas ni puntaje. El servidor recorta el alias y crea el estado inicial.
+
+**Respuesta: `201 Created`**
 
 ```json
 {
-  "gameId": "game-uuid",
+  "gameId": "9f37637f-2347-41ee-b366-7391cd2035ec",
   "status": "IN_PROGRESS",
   "progress": { "answered": 0, "total": 10 },
-  "question": { "id": "q-01", "position": 1, "total": 10, "prompt": "...", "options": [{ "id": "A", "label": "..." }, { "id": "B", "label": "..." }, { "id": "C", "label": "..." }, { "id": "D", "label": "..." }] }
+  "question": {
+    "id": "q-01",
+    "position": 1,
+    "total": 10,
+    "prompt": "¿Qué significa «parce» en Antioquia?",
+    "options": [
+      { "id": "A", "label": "Una moneda antigua" },
+      { "id": "B", "label": "Un baile típico" },
+      { "id": "C", "label": "Amigo, compañero o parcero" },
+      { "id": "D", "label": "Un plato de fríjoles" }
+    ]
+  }
 }
 ```
 
-Alias devuelto en el resultado será el alias ya normalizado. Entrada inválida: `400 INVALID_ALIAS`. Cada llamada válida crea una partida nueva; por eso “jugar de nuevo” vuelve a llamar a este endpoint.
+El frontend guarda `gameId` en la URL `/game/{gameId}` y muestra `question`.
 
-### 2. Consultar estado actual — `GET /api/games/{gameId}`
+**Errores**
 
-Permite recuperar la pregunta vigente si el navegador se recarga. No devuelve respuestas correctas de preguntas pendientes.
+| HTTP | Código | Acción en la interfaz |
+|---|---|---|
+| `400` | `INVALID_REQUEST` | Indicar que la solicitud no tiene JSON con el formato esperado. |
+| `400` | `INVALID_ALIAS` | Mantener al usuario en Inicio, enfocar Alias y mostrar el mensaje. |
+| `503` | `STORAGE_UNAVAILABLE` | No iniciar la pantalla de juego; mostrar error y opción Reintentar. |
 
-**Éxito: `200 OK`**: mismo formato de estado que `POST /api/games`, con el progreso actual y pregunta pendiente. Si la partida ya terminó, responde `{ "gameId": "...", "status": "COMPLETED", "result": { ... } }`.
+### B. Recuperar partida — `GET /api/games/{gameId}`
 
-Errores: `404 GAME_NOT_FOUND`, `410 GAME_EXPIRED`. Una sesión incompleta expirada no aparece en el historial ni en el ranking.
+**Cuándo:** al entrar directamente a `/game/{gameId}` o recargar una página. No lleva body.
 
-### 3. Confirmar respuesta — `POST /api/games/{gameId}/answers`
-
-**Solicitud**
-
-```json
-{ "questionId": "q-01", "selectedOptionId": "B" }
-```
-
-**Éxito intermedio: `200 OK`**
+**Respuesta: `200 OK`, partida activa**
 
 ```json
 {
-  "gameId": "game-uuid",
+  "gameId": "9f37637f-2347-41ee-b366-7391cd2035ec",
+  "status": "IN_PROGRESS",
+  "progress": { "answered": 1, "total": 10 },
+  "question": {
+    "id": "q-02",
+    "position": 2,
+    "total": 10,
+    "prompt": "¿Qué significa «rolo» en Bogotá?",
+    "options": [
+      { "id": "A", "label": "Un tipo de pan" },
+      { "id": "B", "label": "Un bus de la ciudad" },
+      { "id": "C", "label": "Un instrumento musical" },
+      { "id": "D", "label": "Persona nacida en Bogotá" }
+    ]
+  }
+}
+```
+
+**Respuesta: `200 OK`, partida terminada**
+
+```json
+{
+  "gameId": "9f37637f-2347-41ee-b366-7391cd2035ec",
+  "status": "COMPLETED",
+  "result": {
+    "id": "c5a6eb47-2af8-4d6c-a23b-5619cc362084",
+    "alias": "Luna",
+    "correctCount": 7,
+    "incorrectCount": 3,
+    "score": 70,
+    "finishedAt": "2026-12-01T15:30:00.000Z"
+  }
+}
+```
+
+**Errores:** `400 INVALID_REQUEST` si `gameId` no tiene formato UUID; `404 GAME_NOT_FOUND`; `410 GAME_EXPIRED`; `503 STORAGE_UNAVAILABLE`. Una sesión expirada no es un resultado terminado ni aparece en el ranking.
+
+### C. Confirmar respuesta — `POST /api/games/{gameId}/answers`
+
+**Cuándo:** al pulsar **Confirmar respuesta** con una opción seleccionada. La selección por sí sola no llama a la API.
+
+**Body que envía el frontend**
+
+| Campo | Tipo | Regla |
+|---|---|---|
+| `questionId` | string | Obligatorio; ID de secuencia `q-01` a `q-10`. Debe ser la pregunta vigente. |
+| `selectedOptionId` | string | Obligatorio; uno de `A`, `B`, `C` o `D`. |
+
+```json
+{
+  "questionId": "q-01",
+  "selectedOptionId": "C"
+}
+```
+
+No enviar `isCorrect`, `correctOptionId`, `score`, `correctCount` ni `nextQuestion`. El cliente solo envía el ID de pregunta vigente y la opción que eligió.
+
+**Respuesta: `200 OK`, quedan preguntas**
+
+```json
+{
+  "gameId": "9f37637f-2347-41ee-b366-7391cd2035ec",
   "status": "IN_PROGRESS",
   "acceptedQuestionId": "q-01",
   "isCorrect": true,
-  "correctOptionId": "B",
+  "correctOptionId": "C",
   "progress": { "answered": 1, "total": 10 },
-  "nextQuestion": { "id": "q-02", "position": 2, "total": 10, "prompt": "...", "options": [{ "id": "A", "label": "..." }, { "id": "B", "label": "..." }, { "id": "C", "label": "..." }, { "id": "D", "label": "..." }] }
+  "nextQuestion": {
+    "id": "q-02",
+    "position": 2,
+    "total": 10,
+    "prompt": "¿Qué significa «rolo» en Bogotá?",
+    "options": [
+      { "id": "A", "label": "Un tipo de pan" },
+      { "id": "B", "label": "Un bus de la ciudad" },
+      { "id": "C", "label": "Un instrumento musical" },
+      { "id": "D", "label": "Persona nacida en Bogotá" }
+    ]
+  }
 }
 ```
 
-La respuesta final usa `status: "COMPLETED"`, `nextQuestion: null` y agrega `result` con el tipo anterior. `isCorrect` y `correctOptionId` se revelan únicamente después de aceptar esa respuesta.
+El frontend deshabilita las opciones y muestra el feedback (`isCorrect` y, si desea resaltar, `correctOptionId`). Espera a que el usuario pulse **Continuar** antes de mostrar `nextQuestion`; ese botón no hace otra llamada.
 
-El backend valida que el juego siga activo, que `questionId` sea la pregunta vigente y que `selectedOptionId` pertenezca a ella. La misma pregunta y la misma opción repetidas devuelven la confirmación original sin volver a puntuar. Misma pregunta con opción distinta devuelve `409 QUESTION_ALREADY_ANSWERED`. Pregunta fuera de secuencia: `409 QUESTION_OUT_OF_ORDER`; selección desconocida: `400 INVALID_ANSWER`; juego cerrado: `409 GAME_ALREADY_COMPLETED`.
+**Respuesta: `200 OK`, décima respuesta**
 
-### 4. Consultar clasificación — `GET /api/leaderboard?limit=5`
+```json
+{
+  "gameId": "9f37637f-2347-41ee-b366-7391cd2035ec",
+  "status": "COMPLETED",
+  "acceptedQuestionId": "q-10",
+  "isCorrect": false,
+  "correctOptionId": "A",
+  "progress": { "answered": 10, "total": 10 },
+  "nextQuestion": null,
+  "result": {
+    "id": "c5a6eb47-2af8-4d6c-a23b-5619cc362084",
+    "alias": "Luna",
+    "correctCount": 7,
+    "incorrectCount": 3,
+    "score": 70,
+    "finishedAt": "2026-12-01T15:30:00.000Z"
+  }
+}
+```
 
-`limit` se acepta entre 1 y 5 y por defecto es 5; valores fuera de rango se rechazan con `400 INVALID_LIMIT`.
+El backend confirma la persistencia antes de responder `COMPLETED`. Si la respuesta final devuelve error, la interfaz no anuncia un resultado guardado. Repetir exactamente el mismo body para la última pregunta devuelve la misma respuesta sin insertar otro registro.
 
-**Éxito: `200 OK`**
+**Errores**
+
+| HTTP | Código | Cuándo / acción |
+|---|---|---|
+| `400` | `INVALID_REQUEST` | Body ausente o JSON inválido; informar y permitir reintentar. |
+| `400` | `INVALID_ANSWER` | El ID de pregunta tiene formato inválido o `selectedOptionId` no es `A`, `B`, `C` o `D`; pedir una opción válida. |
+| `404` | `GAME_NOT_FOUND` | El `gameId` no existe; ofrecer volver a Inicio. |
+| `409` | `QUESTION_OUT_OF_ORDER` | El `questionId` no es el vigente; recuperar con `GET /api/games/{gameId}`. |
+| `409` | `QUESTION_ALREADY_ANSWERED` | Se intentó cambiar una opción ya confirmada; recuperar el estado. |
+| `409` | `GAME_ALREADY_COMPLETED` | La partida ya terminó; navegar a Resultado. |
+| `410` | `GAME_EXPIRED` | La sesión expiró; iniciar una partida nueva. |
+| `503` | `STORAGE_UNAVAILABLE` | No se pudo guardar/leer; mostrar error y permitir reintentar sin fingir éxito. |
+
+Un reintento idéntico de una respuesta ya procesada es idempotente: el backend devuelve el mismo feedback. Reintentar con otra opción para la misma pregunta no altera el registro.
+
+### D. Consultar clasificación — `GET /api/leaderboard?limit=5`
+
+**Cuándo:** al entrar a `/leaderboard` o pulsar **Ver clasificación**. No lleva body. `limit` es opcional y el frontend enviará `5`.
+
+**Respuesta: `200 OK`**
 
 ```json
 {
   "items": [
-    { "rank": 1, "alias": "Luna", "correctCount": 10, "incorrectCount": 0, "score": 100, "finishedAt": "2026-12-01T15:30:00.000Z" }
+    {
+      "rank": 1,
+      "alias": "Luna",
+      "correctCount": 10,
+      "incorrectCount": 0,
+      "score": 100,
+      "finishedAt": "2026-12-01T15:30:00.000Z"
+    },
+    {
+      "rank": 2,
+      "alias": "Mateo",
+      "correctCount": 9,
+      "incorrectCount": 1,
+      "score": 90,
+      "finishedAt": "2026-12-01T14:20:00.000Z"
+    }
   ]
 }
 ```
 
-Puede devolver `items: []`. Orden: `score DESC`, luego número consecutivo de registro (`sequence ASC`). El `finishedAt` se muestra en la interfaz, pero no resuelve empates porque su precisión temporal puede coincidir. El ranking incluye partidas terminadas solamente; el mismo alias puede aparecer varias veces.
+`items` puede estar vacío. Si hay más registros, la API devuelve como máximo cinco. Ordena por puntaje descendente y, en empate, por consecutivo de registro ascendente. La interfaz representa el array recibido sin reordenarlo.
 
-## Persistencia y sesión en Supabase
+**Errores:** `400 INVALID_LIMIT` si el límite no es entero entre 1 y 5; `503 STORAGE_UNAVAILABLE` si falla Supabase. Un error no se presenta como lista vacía.
 
-Las funciones de Vercel pueden ejecutarse en instancias distintas, por eso la sesión activa no se conserva en memoria del proceso. Se recomienda una tabla `game_sessions` para el estado temporal y una tabla `game_results` para partidas completadas.
+## Matriz compacta de request/response
 
-- `game_sessions`: `id`, `alias`, `current_position`, respuestas confirmadas, estado `IN_PROGRESS/COMPLETED`, última confirmación serializada para reintentos, `created_at`, `expires_at`. No es historial ni participa en clasificación; se puede borrar tras expirar.
-- `game_results`: `id`, `sequence` consecutivo generado por la base de datos, `game_id` único, `alias`, `correct_count`, `score`, `created_at`. `game_id` evita duplicar el resultado; `sequence ASC` asegura que, con el mismo puntaje, aparezca primero quien registró antes.
-- Las claves privadas Supabase se usan solo en las rutas servidoras. El navegador no tiene permisos para insertar ni modificar estos registros.
-- Actualizar posición y respuesta debe ser atómico (transacción/RPC de Supabase o actualización condicional) para que dos confirmaciones simultáneas no puntúen doble.
-- La escritura del resultado final y el cambio de estado deben ser consistentes; una repetición de la última solicitud devuelve el mismo resultado.
+| Acción de frontend | Método y ruta | Body request | Éxito |
+|---|---|---|---|
+| Iniciar o replay | `POST /api/games` | `{ "alias": "Luna" }` | `201`: `gameId`, `status`, `progress`, `question` |
+| Abrir/recuperar juego | `GET /api/games/{gameId}` | Ninguno | `200`: partida activa (`question`) o terminada (`result`) |
+| Confirmar opción | `POST /api/games/{gameId}/answers` | `{ "questionId": "q-01", "selectedOptionId": "C" }` | `200`: feedback y siguiente pregunta, o resultado final |
+| Abrir ranking | `GET /api/leaderboard?limit=5` | Ninguno | `200`: `{ "items": [...] }` |
 
-## Flujo de datos de punta a punta
+## Límites de responsabilidad entre módulos
 
-1. Inicio: formulario → `POST /api/games` → validación de alias → banco/dominio → sesión temporal en Supabase → pregunta pública JSON → pantalla de juego.
-2. Respuesta: selección en UI → `POST /api/games/{id}/answers` → validación de orden/duplicado → dominio calcula acierto → sesión avanza en Supabase → JSON de retroalimentación y siguiente pregunta → UI actualiza progreso.
-3. Final: décima respuesta → dominio calcula conteo y puntaje → inserción idempotente en `game_results` → respuesta final JSON → pantalla de resumen.
-4. Ranking: pantalla solicita `GET /api/leaderboard` → servicio consulta y ordena resultados → UI representa lista o estado vacío.
+| Módulo | Contrato |
+|---|---|
+| UI Next.js | Recoge alias/opción, muestra respuesta del servidor, gestiona carga, feedback y errores. No calcula puntaje. |
+| API Route Handler | Lee path/query/body, valida el formato HTTP y traduce errores a status JSON. |
+| Servicio y dominio | Normalizan alias, seleccionan pregunta vigente, determinan acierto, evitan duplicado y calculan resultado. |
+| Repositorio Supabase | Persiste sesiones y resultados y consulta top cinco. No recibe llamadas desde navegador. |
+| Supabase | Aplica las restricciones de score, clave única de partida, bloqueo atómico de respuestas y orden de ranking. |
 
-## Contratos para pruebas
-
-- API: alias vacío, inválido y válido; partida recuperable; selección ausente/incorrecta/desconocida; pregunta repetida igual y distinta; respuesta final repetida; ranking vacío, con empates y más de cinco registros; fallo de Supabase.
-- Interfaz: estados `loading`, `error`, `in progress`, `feedback`, `completed` y `empty`; nunca muestra un guardado exitoso antes de recibir confirmación del servidor.
-- Dominio: reglas de alias, secuencia, acierto, error, duplicado y resultado se prueban sin navegador ni conexión a Supabase.
+El body, la respuesta y los códigos de error de cada llamada son el acuerdo entre Jordan y backend. Cualquier cambio de campo o ruta debe actualizar este documento y la prueba del endpoint en el mismo PR.
