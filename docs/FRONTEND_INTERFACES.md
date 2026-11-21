@@ -104,3 +104,72 @@ sequenceDiagram
 - Cristian: contratos HTTP, validación de entradas y dominio; el servidor determina acierto y puntaje.
 - Daniel: persistencia, clasificación y orden de resultados.
 - Todos: revisar el flujo completo contra RF1–RF7 y los escenarios P1–P7 antes de cerrar las issues.
+
+## Contexto de integración backend para Jordan
+
+### Estado actual
+
+El backend de la rama del [PR #16](https://github.com/pro158127/proyecto-final-lenguajes-quiz/pull/16) ya tiene los Route Handlers, dominio, repositorio Supabase y contrato HTTP. La interfaz de `app/page.js` todavía es una portada provisional; estas instrucciones son el handoff para implementar el frontend.
+
+Rutas implementadas:
+
+- `app/api/games/route.js`: crea una partida.
+- `app/api/games/[gameId]/route.js`: recupera la sesión y el resumen final.
+- `app/api/games/[gameId]/answers/route.js`: confirma una opción y devuelve feedback/avance.
+- `app/api/leaderboard/route.js`: devuelve la clasificación.
+
+No importes `src/server/*` desde componentes cliente y no inicialices Supabase en el navegador. El frontend usa `fetch` al mismo origen (`/api/...`). `SUPABASE_SERVICE_ROLE_KEY` es solo del backend y nunca debe tener prefijo `NEXT_PUBLIC_`.
+
+### Datos que debe enviar el cliente
+
+| Acción | Método/ruta | Body exacto |
+|---|---|---|
+| Iniciar/replay | `POST /api/games` | `{ "alias": "Luna" }` |
+| Confirmar respuesta | `POST /api/games/{gameId}/answers` | `{ "questionId": "q-01", "selectedOptionId": "C" }` |
+| Recuperar partida | `GET /api/games/{gameId}` | Sin body |
+| Clasificación | `GET /api/leaderboard?limit=5` | Sin body |
+
+`gameId` es el UUID que devuelve la creación. `questionId` es `q-01` a `q-10` por posición de partida, aunque el banco fuente tenga IDs distintos. `selectedOptionId` es mayúscula `A`, `B`, `C` o `D`. El cliente no envía puntaje, aciertos, respuesta correcta, explicación ni la siguiente pregunta.
+
+### Datos que devuelve el backend
+
+- Crear partida (`201`): `gameId`, `status: "IN_PROGRESS"`, `progress` y `question` pública.
+- Recuperar activa (`200`): `gameId`, `status`, `progress` y `question` vigente.
+- Confirmar del 1 al 9 (`200`): `acceptedQuestionId`, `isCorrect`, `correctOptionId`, `progress` y `nextQuestion`.
+- Confirmar la 10 (`200`): lo anterior, `nextQuestion: null`, `status: "COMPLETED"` y `result` con `id`, `alias`, `correctCount`, `incorrectCount`, `score`, `finishedAt`.
+- Ranking (`200`): `{ "items": [...] }`; `items` puede ser `[]` y ya viene ordenado.
+- Error: `{ "error": { "code": "...", "message": "..." } }`. Muestra `message`; no conviertas un `503` en una lista vacía ni en confirmación de guardado.
+
+Los ejemplos JSON completos y todos los códigos HTTP están en [CONTRATOS_API.md](CONTRATOS_API.md).
+
+### Ejemplos de `fetch`
+
+```js
+async function startGame(alias) {
+  const response = await fetch('/api/games', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({ alias }),
+  });
+  const payload = await response.json();
+  if (!response.ok) throw new Error(payload.error.message);
+  return payload;
+}
+
+async function submitAnswer(gameId, questionId, selectedOptionId) {
+  const response = await fetch(`/api/games/${gameId}/answers`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({ questionId, selectedOptionId }),
+  });
+  const payload = await response.json();
+  if (!response.ok) throw new Error(payload.error.message);
+  return payload;
+}
+```
+
+Tras `submitAnswer`, congela la selección y muestra `isCorrect` antes de presentar `nextQuestion`. El botón **Continuar** solo cambia el estado visual; no vuelve a enviar ni pide otra pregunta. El servidor registra cada respuesta de forma idempotente, así que repetir el mismo body devuelve el feedback aceptado sin duplicar puntaje. Tras una recarga, llama `GET /api/games/{gameId}` para obtener el estado vigente.
+
+### Qué está pendiente para cerrar el backend
+
+El código y los contratos están preparados, pero aún falta aplicar `supabase/migrations/20261121000000_quiz_schema.sql` al proyecto Supabase del equipo, configurar `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY`, y comprobar creación/respuesta/ranking contra esa instancia real. También falta enlazar Vercel y poner allí las variables. Este entorno no tiene esas credenciales ni el proyecto enlazado, así que no se afirma que el despliegue ni la persistencia remota estén verificados.
