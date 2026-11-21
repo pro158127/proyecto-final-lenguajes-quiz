@@ -20,27 +20,30 @@ El backend valida y calcula el puntaje; no confía en un total calculado solo po
 ```text
 .
 ├── app/
-│   ├── page.tsx                         # Inicio y flujo de trivia
-│   ├── leaderboard/page.tsx             # Clasificación
+│   ├── page.js                           # Pantalla inicial provisional
+│   ├── layout.js                         # Layout global
 │   └── api/
-│       ├── games/route.ts               # POST crear partida
-│       ├── games/[gameId]/route.ts      # GET estado de partida
-│       ├── games/[gameId]/answers/route.ts # POST confirmar respuesta
-│       └── leaderboard/route.ts         # GET top cinco
+│       ├── games/route.js               # POST crear partida
+│       ├── games/[gameId]/route.js      # GET estado de partida
+│       ├── games/[gameId]/answers/route.js # POST confirmar respuesta
+│       └── leaderboard/route.js         # GET top cinco
 ├── components/                          # Componentes de interfaz
 ├── docs/                                # Requisitos, arquitectura y contratos
+├── supabase/migrations/                 # Esquema y funciones transaccionales
 ├── public/                              # Recursos estáticos propios
 ├── src/
 │   ├── data/
 │   │   ├── regionalismos_colombia.json # Banco fuente (37 preguntas)
 │   │   └── seleccion_partida.json      # Diez IDs fijos por partida básica
-│   ├── client/api-client.ts             # Consumo tipado de la API desde UI
-│   ├── domain/                          # Pregunta, Partida y reglas puras
-│   ├── server/games/                    # Casos de uso de partida
-│   ├── server/leaderboard/              # Caso de uso de clasificación
-│   └── server/repositories/             # Interfaces e implementación Supabase
+│   ├── client/api-client.js             # Consumo de la API desde UI
+│   ├── domain/                          # Validación, Pregunta, Partida y reglas puras
+│   └── server/
+│       ├── question-data.js             # Carga la selección fija de preguntas
+│       ├── supabase.js                  # Cliente servidor con clave privada
+│       ├── http.js                      # Errores y respuestas HTTP
+│       └── repositories/                # Acceso Supabase a sesiones/resultados
 ├── tests/unit/                          # Pruebas puras del dominio
-├── tests/api/                           # Pruebas de contratos de rutas
+├── tests/api/                           # Pruebas futuras de contratos HTTP
 ├── tests/manual/                        # Registro P1–P7
 ├── .env.example
 ├── package.json
@@ -64,8 +67,8 @@ Los Route Handlers usan runtime Node.js. Las páginas/componentes llaman al clie
 
 ## Entidades y contratos
 
-- `Pregunta`: `id`, `prompt`, `options[4]`, `correctOptionId`, `position`. Método/regla para determinar si una opción es correcta.
-- `Partida`: `id`, `alias`, estado de pregunta, respuestas confirmadas, `correctCount`, `score`, `status`, fecha de creación. Solo acepta una confirmación por pregunta; finaliza al contestar diez.
+- `Question` (`Pregunta`): clase con ID, región, término, enunciado, cuatro opciones, respuesta correcta y explicación. `isCorrect()` evalúa la selección y `toPublic()` omite la solución antes de confirmar.
+- `Partida`: entidad con alias, diez preguntas, avance, respuestas y estado. Su método `answer()` valida el orden, evita duplicados, evalúa la respuesta y calcula el resultado al completar.
 - Servicio de juego: inicia sesión de juego, valida cada respuesta, devuelve retroalimentación y resume al final.
 - Repositorio de partidas: inserta finalizaciones de forma idempotente y consulta top cinco. Supabase queda detrás de esta interfaz para que la lógica de dominio no dependa del proveedor.
 
@@ -89,7 +92,7 @@ Consulta de clasificación: ordenar por `score DESC`, luego por `sequence ASC` (
 
 ## Configuración
 
-`.env.example` enumera solo nombres de variables, sin secretos. La configuración real va en variables de entorno locales ignoradas por Git y en los ajustes de Vercel. El nombre exacto de la variable de URL y las claves públicas/servidor se fija al implementar el cliente Supabase. El proyecto requiere Node.js 20.9 o superior para la versión actual de Next.js elegida.
+`.env.example` enumera solo nombres de variables, sin secretos. La configuración real va en variables de entorno locales ignoradas por Git y en los ajustes de Vercel. El backend usa `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY`; la clave de servicio permanece solo en el servidor. El proyecto requiere Node.js 20.9 o superior para la versión actual de Next.js elegida.
 
 ## Manejo de errores
 
@@ -103,4 +106,6 @@ Consulta de clasificación: ordenar por `score DESC`, luego por `sequence ASC` (
 
 - Nombre visual definitivo de la trivia.
 - Identificadores GitHub de integrantes para responsables formales.
-- Confirmar la expiración y política de limpieza de sesiones incompletas. La propuesta es guardar progreso temporal en Supabase; la partida incompleta no se inserta en `game_results` ni en el ranking.
+- Configurar credenciales Supabase y aplicar la migración en el proyecto del equipo.
+- Configurar Vercel para el repositorio y añadir variables de entorno.
+- Confirmar la política automática para limpiar sesiones expiradas.

@@ -41,7 +41,7 @@ La comunicación interna es por llamadas de funciones y tipos compartidos, no po
 }
 ```
 
-`details` puede omitirse. Códigos iniciales: `INVALID_ALIAS`, `INVALID_ANSWER`, `GAME_NOT_FOUND`, `GAME_EXPIRED`, `QUESTION_OUT_OF_ORDER`, `QUESTION_ALREADY_ANSWERED`, `GAME_ALREADY_COMPLETED`, `STORAGE_UNAVAILABLE`, `INTERNAL_ERROR`.
+`details` puede omitirse. Códigos iniciales: `INVALID_ALIAS`, `INVALID_REQUEST`, `INVALID_LIMIT`, `INVALID_ANSWER`, `GAME_NOT_FOUND`, `GAME_EXPIRED`, `QUESTION_OUT_OF_ORDER`, `QUESTION_ALREADY_ANSWERED`, `GAME_ALREADY_COMPLETED`, `STORAGE_UNAVAILABLE`, `INTERNAL_ERROR`.
 
 ## Tipos JSON públicos
 
