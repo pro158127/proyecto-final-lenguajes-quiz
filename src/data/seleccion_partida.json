@@ -1,0 +1,6 @@
+{
+  "titulo": "Selección fija de la trivia de regionalismos de Colombia",
+  "total_preguntas": 10,
+  "question_ids": [1, 7, 12, 18, 23, 25, 29, 33, 34, 37],
+  "regla_puntaje": "La aplicación asigna 10 puntos por respuesta correcta y 0 por respuesta incorrecta. El campo puntaje del archivo fuente no determina el resultado de la partida."
+}

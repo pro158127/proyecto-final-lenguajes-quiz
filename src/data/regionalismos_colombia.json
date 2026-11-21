@@ -1,0 +1,598 @@
+{
+  "titulo": "Trivia de regionalismos de Colombia",
+  "total_preguntas": 37,
+  "preguntas": [
+    {
+      "id": 1,
+      "region": "Antioquia",
+      "palabra": "parce",
+      "pregunta": "¿Qué significa «parce» en Antioquia?",
+      "opciones": {
+        "A": "Una moneda antigua",
+        "B": "Un baile típico",
+        "C": "Amigo, compañero o parcero",
+        "D": "Un plato de fríjoles"
+      },
+      "dificultad": "facil",
+      "puntaje": 10,
+      "respuesta_correcta": "C",
+      "explicacion": "'Parce' es la forma abreviada de 'parcero'. Se usa para llamar a un amigo o a cualquier persona con confianza: '¿Qué más, parce?'."
+    },
+    {
+      "id": 2,
+      "region": "Antioquia",
+      "palabra": "camellar",
+      "pregunta": "¿Qué significa «camellar» en Antioquia?",
+      "opciones": {
+        "A": "Caminar mucho",
+        "B": "Dormir la siesta",
+        "C": "Montar a caballo",
+        "D": "Trabajar"
+      },
+      "dificultad": "facil",
+      "puntaje": 10,
+      "respuesta_correcta": "D",
+      "explicacion": "'Camellar' es trabajar y 'camello' es el trabajo o empleo. Es muy típico del habla paisa."
+    },
+    {
+      "id": 3,
+      "region": "Antioquia",
+      "palabra": "recocha",
+      "pregunta": "¿Qué significa «recocha» en Antioquia?",
+      "opciones": {
+        "A": "Una pelea callejera",
+        "B": "Diversión, relajo o desorden alegre entre amigos",
+        "C": "Una deuda pendiente",
+        "D": "Una sopa de res"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "B",
+      "explicacion": "'Recocha' es el jolgorio, la broma y la fiesta informal. 'Estar de recocha' es pasarla bien sin mucha seriedad."
+    },
+    {
+      "id": 4,
+      "region": "Antioquia",
+      "palabra": "qué chimba",
+      "pregunta": "¿Qué significa «qué chimba» en Antioquia?",
+      "opciones": {
+        "A": "¡Qué susto!",
+        "B": "¡Qué hambre!",
+        "C": "¡Qué genial! o ¡Qué excelente!",
+        "D": "¡Qué lejos!"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "C",
+      "explicacion": "'Qué chimba' es una expresión paisa informal para decir que algo está muy bueno. Ojo: es coloquial y no apta para contextos formales."
+    },
+    {
+      "id": 5,
+      "region": "Antioquia y Eje Cafetero",
+      "palabra": "berraco",
+      "pregunta": "¿Qué significa «berraco» en Antioquia y Eje Cafetero?",
+      "opciones": {
+        "A": "Elegante",
+        "B": "Valiente, trabajador o también algo muy difícil",
+        "C": "Perezoso",
+        "D": "Aburrido"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "B",
+      "explicacion": "'Berraco' puede ser una persona valiente y aguerrida ('es muy berraca'), algo difícil ('está berraco') o incluso estar muy bravo. El contexto lo define."
+    },
+    {
+      "id": 6,
+      "region": "Antioquia y Eje Cafetero",
+      "palabra": "hágale",
+      "pregunta": "¿Qué significa «hágale» en Antioquia y Eje Cafetero?",
+      "opciones": {
+        "A": "Hágalo después",
+        "B": "No me interesa",
+        "C": "Dale, de acuerdo, ¡vamos!",
+        "D": "Quédese quieto"
+      },
+      "dificultad": "facil",
+      "puntaje": 10,
+      "respuesta_correcta": "C",
+      "explicacion": "'Hágale' se usa para aceptar un plan o animar a alguien a actuar: '¿Vamos a comer? ¡Hágale!'."
+    },
+    {
+      "id": 7,
+      "region": "Bogotá",
+      "palabra": "rolo",
+      "pregunta": "¿Qué significa «rolo» en Bogotá?",
+      "opciones": {
+        "A": "Un tipo de pan",
+        "B": "Un bus de la ciudad",
+        "C": "Un instrumento musical",
+        "D": "Persona nacida en Bogotá"
+      },
+      "dificultad": "facil",
+      "puntaje": 10,
+      "respuesta_correcta": "D",
+      "explicacion": "'Rolo' es el gentilicio coloquial de los bogotanos, muy usado en el resto del país."
+    },
+    {
+      "id": 8,
+      "region": "Bogotá y región andina",
+      "palabra": "cachaco",
+      "pregunta": "¿Qué significa «cachaco» en Bogotá y región andina?",
+      "opciones": {
+        "A": "Un comerciante ambulante",
+        "B": "Persona del interior andino, tradicionalmente bogotano, de buenos modales",
+        "C": "Un animal de monte",
+        "D": "Persona de la costa"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "B",
+      "explicacion": "Históricamente 'cachaco' describe al hombre del interior, elegante y caballeroso. Hoy se usa para referirse a gente del centro del país."
+    },
+    {
+      "id": 9,
+      "region": "Bogotá y centro del país",
+      "palabra": "pola",
+      "pregunta": "¿Qué significa «pola» en Bogotá y centro del país?",
+      "opciones": {
+        "A": "Una moneda",
+        "B": "Una bicicleta",
+        "C": "Cerveza",
+        "D": "Un tipo de arepa"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "C",
+      "explicacion": "'Pola' es la forma coloquial de llamar a la cerveza en Colombia, muy popular en Bogotá."
+    },
+    {
+      "id": 10,
+      "region": "Cundinamarca y Boyacá",
+      "palabra": "sumercé",
+      "pregunta": "¿Qué significa «sumercé» en Cundinamarca y Boyacá?",
+      "opciones": {
+        "A": "Una comida típica",
+        "B": "Un saludo militar",
+        "C": "Una prenda de lana",
+        "D": "Forma muy respetuosa y cariñosa de decir 'usted'"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "D",
+      "explicacion": "'Sumercé' viene de 'su merced'. Se usa con familiares, mayores o con cariño: '¿Cómo está, sumercé?'."
+    },
+    {
+      "id": 11,
+      "region": "Cundinamarca y Boyacá",
+      "palabra": "chino",
+      "pregunta": "¿Qué significa «chino» en Cundinamarca y Boyacá?",
+      "opciones": {
+        "A": "Un sombrero",
+        "B": "Niño o muchacho",
+        "C": "Persona de China",
+        "D": "Un cuchillo"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "B",
+      "explicacion": "En el altiplano cundiboyacense 'chino/china' significa niño o niña, sin relación con el origen asiático."
+    },
+    {
+      "id": 12,
+      "region": "Costa Caribe",
+      "palabra": "mamar gallo",
+      "pregunta": "¿Qué significa «mamar gallo» en Costa Caribe?",
+      "opciones": {
+        "A": "Cocinar pollo",
+        "B": "Madrugar",
+        "C": "Pelear con un gallo",
+        "D": "Bromear, tomar del pelo o burlarse"
+      },
+      "dificultad": "facil",
+      "puntaje": 10,
+      "respuesta_correcta": "D",
+      "explicacion": "'Mamar gallo' es hacer bromas o hacer perder el tiempo a alguien. Es de origen costeño y hoy se usa en todo el país."
+    },
+    {
+      "id": 13,
+      "region": "Costa Caribe",
+      "palabra": "ajá",
+      "pregunta": "¿Qué significa «ajá» en Costa Caribe?",
+      "opciones": {
+        "A": "Una queja de dolor",
+        "B": "Un estornudo",
+        "C": "Interjección para pedir que continúen o para decir '¿y entonces?'",
+        "D": "Una despedida"
+      },
+      "dificultad": "facil",
+      "puntaje": 10,
+      "respuesta_correcta": "C",
+      "explicacion": "El costeño usa 'ajá' para saludar, animar a hablar o mostrar interés: '¿Ajá, y qué pasó?'."
+    },
+    {
+      "id": 14,
+      "region": "Costa Caribe",
+      "palabra": "vaina",
+      "pregunta": "¿Qué significa «vaina» en Costa Caribe?",
+      "opciones": {
+        "A": "Una espada",
+        "B": "Una fruta",
+        "C": "Cosa, asunto o situación",
+        "D": "Una enfermedad"
+      },
+      "dificultad": "facil",
+      "puntaje": 10,
+      "respuesta_correcta": "C",
+      "explicacion": "'Vaina' sirve para casi todo: objeto, problema o situación. 'Qué vaina' expresa sorpresa o fastidio."
+    },
+    {
+      "id": 15,
+      "region": "Costa Caribe",
+      "palabra": "raspao",
+      "pregunta": "¿Qué significa «raspao» en Costa Caribe?",
+      "opciones": {
+        "A": "Una herida",
+        "B": "Una carne asada",
+        "C": "Un baile",
+        "D": "Hielo raspado con sirope o leche condensada"
+      },
+      "dificultad": "facil",
+      "puntaje": 10,
+      "respuesta_correcta": "D",
+      "explicacion": "El raspao es una golosina fría de hielo raspado con jarabes de colores; es muy común en la Costa."
+    },
+    {
+      "id": 16,
+      "region": "Costa Caribe",
+      "palabra": "bollo",
+      "pregunta": "¿Qué significa «bollo» en Costa Caribe?",
+      "opciones": {
+        "A": "Masa de maíz o yuca cocida envuelta en hoja",
+        "B": "Un pastel de cumpleaños",
+        "C": "Una pelota",
+        "D": "Un sombrero"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "A",
+      "explicacion": "El 'bollo limpio' o 'bollo de mazorca' se envuelve en hojas y se cocina al vapor. Es infaltable en el desayuno costeño."
+    },
+    {
+      "id": 17,
+      "region": "Costa Caribe y otras regiones",
+      "palabra": "ñapa",
+      "pregunta": "¿Qué significa «ñapa» en Costa Caribe y otras regiones?",
+      "opciones": {
+        "A": "Un regalo o cantidad extra que da el vendedor",
+        "B": "Un tipo de pescado",
+        "C": "Un insulto",
+        "D": "Una siesta"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "A",
+      "explicacion": "'Ñapa' (o 'yapa') es el extra que se recibe al comprar. Viene del quechua 'yapa'."
+    },
+    {
+      "id": 18,
+      "region": "Valle del Cauca (Cali)",
+      "palabra": "cholado",
+      "pregunta": "¿Qué significa «cholado» en Valle del Cauca (Cali)?",
+      "opciones": {
+        "A": "Una sopa caliente",
+        "B": "Hielo raspado con frutas, leche condensada y sirope",
+        "C": "Un pan relleno",
+        "D": "Un tipo de zapato"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "B",
+      "explicacion": "El cholado es el postre refrescante emblemático de Cali y el Valle."
+    },
+    {
+      "id": 19,
+      "region": "Valle del Cauca",
+      "palabra": "champús",
+      "pregunta": "¿Qué significa «champús» en Valle del Cauca?",
+      "opciones": {
+        "A": "Un tipo de sombrero",
+        "B": "Bebida de maíz, lulo, piña, panela y canela",
+        "C": "Una carne asada",
+        "D": "Un baile del Pacífico"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "B",
+      "explicacion": "El champús es una bebida tradicional vallecaucana, también presente en Nariño y Tolima."
+    },
+    {
+      "id": 20,
+      "region": "Valle del Cauca",
+      "palabra": "aborrajado",
+      "pregunta": "¿Qué significa «aborrajado» en Valle del Cauca?",
+      "opciones": {
+        "A": "Un pan de yuca",
+        "B": "Una sopa de pescado",
+        "C": "Un dulce de leche",
+        "D": "Plátano maduro frito relleno de queso"
+      },
+      "dificultad": "dificil",
+      "puntaje": 20,
+      "respuesta_correcta": "D",
+      "explicacion": "El aborrajado es un plátano maduro envuelto en una masa y frito con queso, típico de la cocina vallecaucana."
+    },
+    {
+      "id": 21,
+      "region": "Valle del Cauca",
+      "palabra": "parchar",
+      "pregunta": "¿Qué significa «parchar» en Valle del Cauca?",
+      "opciones": {
+        "A": "Juntarse a pasar el rato con amigos",
+        "B": "Cocinar",
+        "C": "Colocar un parche",
+        "D": "Estudiar de noche"
+      },
+      "dificultad": "facil",
+      "puntaje": 10,
+      "respuesta_correcta": "A",
+      "explicacion": "'Parchar' es compartir un buen rato; el 'parche' es el grupo de amigos. Es muy usado en Cali."
+    },
+    {
+      "id": 22,
+      "region": "Valle del Cauca",
+      "palabra": "sardino",
+      "pregunta": "¿Qué significa «sardino» en Valle del Cauca?",
+      "opciones": {
+        "A": "Un pez pequeño enlatado",
+        "B": "Adolescente o muchacho joven",
+        "C": "Un cantante",
+        "D": "Un vecino"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "B",
+      "explicacion": "'Sardino/a' es el adolescente. En Cali se usa mucho: 'ese sardino todavía está estudiando'."
+    },
+    {
+      "id": 23,
+      "region": "Pacífico colombiano",
+      "palabra": "viche",
+      "pregunta": "¿Qué significa «viche» en Pacífico colombiano?",
+      "opciones": {
+        "A": "Un tipo de canoa",
+        "B": "Un pescado seco",
+        "C": "Una danza",
+        "D": "Licor artesanal de caña de azúcar"
+      },
+      "dificultad": "dificil",
+      "puntaje": 20,
+      "respuesta_correcta": "D",
+      "explicacion": "El viche es una bebida tradicional del Pacífico, destilada de caña y a veces curada con hierbas."
+    },
+    {
+      "id": 24,
+      "region": "Cauca (Popayán)",
+      "palabra": "pipián",
+      "pregunta": "¿Qué significa «pipián» en Cauca (Popayán)?",
+      "opciones": {
+        "A": "Una danza religiosa",
+        "B": "Relleno o salsa de papa y maní para las empanadas",
+        "C": "Un insulto",
+        "D": "Un instrumento musical"
+      },
+      "dificultad": "dificil",
+      "puntaje": 20,
+      "respuesta_correcta": "B",
+      "explicacion": "Las empanadas de pipián son un plato típico de Popayán, con relleno de papa, maní y especias."
+    },
+    {
+      "id": 25,
+      "region": "Nariño",
+      "palabra": "achachay",
+      "pregunta": "¿Qué significa «achachay» en Nariño?",
+      "opciones": {
+        "A": "Expresión de sueño",
+        "B": "Expresión para indicar que hace mucho frío",
+        "C": "Expresión de alegría",
+        "D": "Un grito de ánimo"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "B",
+      "explicacion": "Viene del quechua. 'Achachay' es frío, 'arrarray' es calor y 'ayayay' es dolor."
+    },
+    {
+      "id": 26,
+      "region": "Nariño",
+      "palabra": "guagua",
+      "pregunta": "¿Qué significa «guagua» en Nariño?",
+      "opciones": {
+        "A": "Una bebida caliente",
+        "B": "Un autobús",
+        "C": "Un animal de carga",
+        "D": "Bebé o niño pequeño"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "D",
+      "explicacion": "En Nariño 'guagua' es el bebé (del quechua). En el Caribe, en cambio, 'guagua' puede ser un bus."
+    },
+    {
+      "id": 27,
+      "region": "Nariño",
+      "palabra": "ñaño",
+      "pregunta": "¿Qué significa «ñaño» en Nariño?",
+      "opciones": {
+        "A": "Hermano o amigo muy cercano",
+        "B": "Un enemigo",
+        "C": "Un vendedor",
+        "D": "Un jefe"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "A",
+      "explicacion": "'Ñaño/a' es hermano/a y también se usa para tratar a un amigo con cariño."
+    },
+    {
+      "id": 28,
+      "region": "Nariño",
+      "palabra": "llapingacho",
+      "pregunta": "¿Qué significa «llapingacho» en Nariño?",
+      "opciones": {
+        "A": "Tortilla de papa rellena de queso",
+        "B": "Un tipo de sopa de maíz",
+        "C": "Una carne seca",
+        "D": "Un baile"
+      },
+      "dificultad": "dificil",
+      "puntaje": 20,
+      "respuesta_correcta": "A",
+      "explicacion": "Los llapingachos son tortillas de papa con queso, servidas con maní, chorizo o huevo."
+    },
+    {
+      "id": 29,
+      "region": "Llanos Orientales",
+      "palabra": "chigüiro",
+      "pregunta": "¿Qué significa «chigüiro» en Llanos Orientales?",
+      "opciones": {
+        "A": "Un pez de río",
+        "B": "Un caballo llanero",
+        "C": "Un tipo de arpa",
+        "D": "Capibara, el roedor más grande del mundo"
+      },
+      "dificultad": "facil",
+      "puntaje": 10,
+      "respuesta_correcta": "D",
+      "explicacion": "El chigüiro es muy común en los ríos y sabanas del llano."
+    },
+    {
+      "id": 30,
+      "region": "Llanos Orientales",
+      "palabra": "hato",
+      "pregunta": "¿Qué significa «hato» en Llanos Orientales?",
+      "opciones": {
+        "A": "Un sombrero",
+        "B": "Finca ganadera grande",
+        "C": "Una canción",
+        "D": "Un tipo de árbol"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "B",
+      "explicacion": "En el llano el 'hato' es la gran hacienda dedicada a la ganadería."
+    },
+    {
+      "id": 31,
+      "region": "Llanos Orientales",
+      "palabra": "mamona",
+      "pregunta": "¿Qué significa «mamona» en Llanos Orientales?",
+      "opciones": {
+        "A": "Un animal salvaje",
+        "B": "Una fruta tropical",
+        "C": "Un dulce de leche",
+        "D": "Carne de ternera asada a la llanera"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "D",
+      "explicacion": "La 'mamona' o 'ternera a la llanera' es carne de ternera asada lentamente al fuego de leña."
+    },
+    {
+      "id": 32,
+      "region": "Llanos Orientales",
+      "palabra": "joropo",
+      "pregunta": "¿Qué significa «joropo» en Llanos Orientales?",
+      "opciones": {
+        "A": "Música y baile típico de los llanos",
+        "B": "Un río",
+        "C": "Un tipo de caballo",
+        "D": "Un plato con pescado"
+      },
+      "dificultad": "facil",
+      "puntaje": 10,
+      "respuesta_correcta": "A",
+      "explicacion": "El joropo es la expresión musical del llano, con arpa, cuatro y maracas."
+    },
+    {
+      "id": 33,
+      "region": "San Andrés y Providencia",
+      "palabra": "rondón",
+      "pregunta": "¿Qué significa «rondón» en San Andrés y Providencia?",
+      "opciones": {
+        "A": "Una canción",
+        "B": "Un baile caribeño",
+        "C": "Guiso de pescado, caracol, coco, yuca y plátano",
+        "D": "Un tipo de barco"
+      },
+      "dificultad": "dificil",
+      "puntaje": 20,
+      "respuesta_correcta": "C",
+      "explicacion": "El 'rondón' (del inglés 'run down') es el plato emblemático del archipiélago, cocinado en leche de coco."
+    },
+    {
+      "id": 34,
+      "region": "Santander",
+      "palabra": "mute",
+      "pregunta": "¿Qué significa «mute» en Santander?",
+      "opciones": {
+        "A": "Un postre de leche",
+        "B": "Un tipo de ají",
+        "C": "Sopa espesa de maíz con varias carnes",
+        "D": "Un baile"
+      },
+      "dificultad": "dificil",
+      "puntaje": 20,
+      "respuesta_correcta": "C",
+      "explicacion": "El mute santandereano es una sopa contundente de maíz, carnes y menudencias."
+    },
+    {
+      "id": 35,
+      "region": "Santander",
+      "palabra": "hormiga culona",
+      "pregunta": "¿Qué significa «hormiga culona» en Santander?",
+      "opciones": {
+        "A": "Un dulce de leche",
+        "B": "Un insulto",
+        "C": "Hormiga grande que se come frita o tostada",
+        "D": "Un tipo de ají"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "C",
+      "explicacion": "Es una delicia gastronómica santandereana, famosa y cotizada, con sabor a tostado."
+    },
+    {
+      "id": 36,
+      "region": "Tolima",
+      "palabra": "lechona",
+      "pregunta": "¿Qué significa «lechona» en Tolima?",
+      "opciones": {
+        "A": "Un queso",
+        "B": "Un tipo de pan",
+        "C": "Cerdo relleno de arroz, arveja y especias, asado al horno",
+        "D": "Una sopa fría"
+      },
+      "dificultad": "medio",
+      "puntaje": 15,
+      "respuesta_correcta": "C",
+      "explicacion": "La lechona tolimense es un plato de celebración, famoso en Ibagué y en Tolima."
+    },
+    {
+      "id": 37,
+      "region": "Amazonía",
+      "palabra": "pirarucú",
+      "pregunta": "¿Qué significa «pirarucú» en Amazonía?",
+      "opciones": {
+        "A": "Pez gigante de agua dulce",
+        "B": "Un instrumento de viento",
+        "C": "Una tribu indígena",
+        "D": "Un árbol medicinal"
+      },
+      "dificultad": "dificil",
+      "puntaje": 20,
+      "respuesta_correcta": "A",
+      "explicacion": "El pirarucú es uno de los peces de agua dulce más grandes del mundo y se consume en la región."
+    }
+  ]
+}

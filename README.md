@@ -4,10 +4,12 @@ Aplicación web de trivia para el proyecto final de Lenguajes de Programación. 
 
 ## Estado
 
-Este repositorio contiene la definición de requisitos, la arquitectura propuesta y el roadmap inicial. El tema de las preguntas y el nombre del tercer integrante están pendientes de confirmación.
+Este repositorio contiene la definición de requisitos, la arquitectura propuesta y el roadmap inicial. La temática es regionalismos de Colombia. El banco contiene 37 preguntas fuente y la partida básica usa diez preguntas fijas de distintas regiones. El nombre del tercer integrante sigue pendiente de confirmación.
 
 ## Documentación
 
+- [Banco fuente de regionalismos](src/data/regionalismos_colombia.json)
+- [Selección fija para la partida](src/data/seleccion_partida.json)
 - [Requisitos funcionales y no funcionales](docs/REQUISITOS.md)
 - [Arquitectura del programa](docs/ARQUITECTURA.md)
 - [Contratos entre módulos y API](docs/CONTRATOS_API.md)

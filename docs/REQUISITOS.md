@@ -10,7 +10,7 @@ La aplicación permite que una persona juegue una trivia individual de diez preg
 |---|---|---|
 | RF-01 | Validar alias al iniciar. La aplicación recorta espacios al inicio y al final y conserva el alias normalizado. | Acepta de 2 a 20 caracteres tras recortar. Rechaza vacío, solo espacios y longitudes fuera del rango con mensaje que indique cómo corregirlo. |
 | RF-02 | Iniciar una partida nueva con estado limpio, alias válido, contador de pregunta en cero y puntaje en cero. | Al iniciar o volver a jugar no quedan respuestas ni puntos de una partida previa. |
-| RF-03 | Cargar el banco definido por el equipo, con diez preguntas identificables y ordenadas. Cada pregunta contiene enunciado, cuatro opciones y referencia a una única opción correcta. | El banco se valida al iniciar la aplicación o partida; cada pregunta tiene exactamente cuatro opciones y una respuesta correcta válida. |
+| RF-03 | Cargar el banco definido por el equipo, con diez preguntas identificables y ordenadas. Cada pregunta contiene enunciado, cuatro opciones y referencia a una única opción correcta. | El banco fuente y la selección se validan al iniciar; la selección contiene exactamente diez IDs únicos existentes y cada pregunta tiene cuatro opciones y una respuesta correcta válida. El orden es fijo y no aleatorio. |
 | RF-04 | Presentar una pregunta a la vez y comunicar el avance. | Se muestran enunciado, cuatro opciones seleccionables y número actual de diez; no se muestran preguntas fuera de secuencia. |
 | RF-05 | Requerir selección antes de confirmar una respuesta. | Sin opción seleccionada no avanza y se muestra indicación comprensible. |
 | RF-06 | Evaluar y confirmar una respuesta una sola vez. | Al confirmar se bloquea la pregunta, se informa acierto/error y clics repetidos no cambian el resultado ni suman puntos. |
@@ -39,7 +39,7 @@ La aplicación permite que una persona juegue una trivia individual de diez preg
 
 **Pregunta**: `id`, `prompt`, `options` (cuatro opciones ordenadas), `correctOptionIndex` (0–3), `position`.
 
-**Partida**: `id` (identificador único), `alias`, `correctCount`, `score`, `createdAt`. Se podrán derivar los errores como `10 - correctCount`. La marca de tiempo permite ordenar empates; si la base de datos retorna timestamps iguales, se usará un identificador/orden de creación estable como desempate secundario.
+**Partida**: `id` (identificador único), `alias`, `correctCount`, `score`, `createdAt`. Se podrán derivar los errores como `10 - correctCount`. Un consecutivo `sequence` generado al insertar permite ordenar por antigüedad de registro incluso cuando dos marcas de tiempo coinciden.
 
 El cliente no debe poder alterar el puntaje enviado y guardado sin validación del servidor. La forma de validar y persistir se define en la implementación del backend; la clave privada de Supabase nunca se expone al navegador.
 

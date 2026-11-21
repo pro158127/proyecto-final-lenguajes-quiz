@@ -31,7 +31,7 @@ El Project incluye campos de selección **Módulo** y **Fase** para filtrar las 
 
 | Tarea | Fase | Responsable propuesto | Criterio de terminado |
 |---|---|---|---|
-| Elegir tema y preparar diez preguntas válidas | Inicio | Todo el equipo | Banco con 10 preguntas, cuatro opciones cada una, respuesta correcta revisada por otra persona. |
+| Validar tema y selección fija de diez preguntas | Inicio | Todo el equipo | Banco fuente de 37 preguntas y selección fija de 10 IDs disponibles; todas las preguntas seleccionadas tienen cuatro opciones y respuesta correcta verificada. |
 | Inicializar repositorio, README y reglas de colaboración | Inicio | Cristian + todo el equipo | Instrucciones, estructura y política de commits revisadas. |
 | Diseñar flujo y vistas accesibles | Interfaz | Jordan | Inicio, juego, resumen y clasificación bosquejados; campos etiquetados y flujo de teclado definido. |
 | Implementar validación de alias y banco | Dominio | Cristian | Reglas RF-01/RF-03 cubiertas y errores claros. |

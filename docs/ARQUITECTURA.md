@@ -2,7 +2,7 @@
 
 ## Decisión general
 
-Aplicación web pequeña con Next.js sobre Node.js. Next.js sirve las páginas y expone Route Handlers HTTP como backend; Supabase proporciona la persistencia. Vercel despliega el proyecto. El tema y el banco son contenido versionado; no se necesita editor de preguntas.
+Aplicación web pequeña con Next.js sobre Node.js. Next.js sirve las páginas y expone Route Handlers HTTP como backend; Supabase proporciona la persistencia. Vercel despliega el proyecto. El tema es regionalismos de Colombia. El banco fuente y la selección fija de diez preguntas son contenido versionado; no se necesita editor de preguntas.
 
 ## Flujo principal
 
@@ -31,6 +31,9 @@ El backend valida y calcula el puntaje; no confía en un total calculado solo po
 ├── docs/                                # Requisitos, arquitectura y contratos
 ├── public/                              # Recursos estáticos propios
 ├── src/
+│   ├── data/
+│   │   ├── regionalismos_colombia.json # Banco fuente (37 preguntas)
+│   │   └── seleccion_partida.json      # Diez IDs fijos por partida básica
 │   ├── client/api-client.ts             # Consumo tipado de la API desde UI
 │   ├── domain/                          # Pregunta, Partida y reglas puras
 │   ├── server/games/                    # Casos de uso de partida
@@ -61,7 +64,7 @@ Los Route Handlers usan runtime Node.js. Las páginas/componentes llaman al clie
 
 ## Entidades y contratos
 
-- `Pregunta`: `id`, `prompt`, `options[4]`, `correctOptionIndex`, `position`. Método/regla para determinar si una opción es correcta.
+- `Pregunta`: `id`, `prompt`, `options[4]`, `correctOptionId`, `position`. Método/regla para determinar si una opción es correcta.
 - `Partida`: `id`, `alias`, estado de pregunta, respuestas confirmadas, `correctCount`, `score`, `status`, fecha de creación. Solo acepta una confirmación por pregunta; finaliza al contestar diez.
 - Servicio de juego: inicia sesión de juego, valida cada respuesta, devuelve retroalimentación y resume al final.
 - Repositorio de partidas: inserta finalizaciones de forma idempotente y consulta top cinco. Supabase queda detrás de esta interfaz para que la lógica de dominio no dependa del proveedor.
@@ -98,6 +101,6 @@ Consulta de clasificación: ordenar por `score DESC`, luego por `sequence ASC` (
 
 ## Decisiones pendientes
 
-- Tema y nombre final de la trivia.
+- Nombre visual definitivo de la trivia.
 - Identificadores GitHub de integrantes para responsables formales.
 - Confirmar la expiración y política de limpieza de sesiones incompletas. La propuesta es guardar progreso temporal en Supabase; la partida incompleta no se inserta en `game_results` ni en el ranking.
