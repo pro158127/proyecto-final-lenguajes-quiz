@@ -32,8 +32,11 @@ export class Partida {
   }
 
   answer({ questionId, selectedOptionId, resultId, finishedAt }) {
-    if (this.lastQuestionId === questionId) {
-      if (this.lastOptionId === selectedOptionId) return { game: this, response: this.lastResponse, duplicate: true };
+    const previousAnswer = this.answers.find((answer) => answer.questionId === questionId);
+    if (previousAnswer) {
+      if (previousAnswer.selectedOptionId === selectedOptionId) {
+        return { game: this, response: previousAnswer.response, duplicate: true };
+      }
       throw new DomainError('QUESTION_ALREADY_ANSWERED', 'Esta pregunta ya fue confirmada con otra opción.', 409);
     }
     if (this.status !== 'IN_PROGRESS') {
@@ -49,7 +52,8 @@ export class Partida {
     }
 
     const isCorrect = current.isCorrect(selectedOptionId);
-    const answers = [...this.answers, { questionId, selectedOptionId, isCorrect }];
+    const answer = { questionId, selectedOptionId, isCorrect, response: null };
+    const answers = [...this.answers, answer];
     const currentPosition = this.currentPosition + 1;
     const completed = currentPosition === this.questions.length;
     const updated = new Partida({
@@ -83,6 +87,7 @@ export class Partida {
         finishedAt,
       };
     }
+    answer.response = response;
     updated.lastResponse = response;
     return { game: updated, response, duplicate: false };
   }

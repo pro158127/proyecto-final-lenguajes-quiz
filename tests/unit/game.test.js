@@ -8,7 +8,7 @@ import { normalizeAlias, selectGameQuestions } from '../../src/domain/validation
 
 const bank = JSON.parse(readFileSync(resolve('src/data/regionalismos_colombia.json'), 'utf8'));
 const selection = JSON.parse(readFileSync(resolve('src/data/seleccion_partida.json'), 'utf8'));
-const questions = selectGameQuestions(bank, selection).map((source) => new Question(source));
+const questions = selectGameQuestions(bank, selection).map((source, index) => new Question(source, index + 1));
 const first = questions[0];
 const firstId = first.id;
 const start = () => createGame({
@@ -97,4 +97,25 @@ test('el resultado final cubre los extremos de 0 y 100 puntos', () => {
     assert.equal(finalResponse.result.score, allCorrect ? 100 : 0);
     assert.equal(finalResponse.result.correctCount, allCorrect ? 10 : 0);
   }
+});
+
+test('reintentar una pregunta previa devuelve su respuesta aceptada sin volver a puntuar', () => {
+  const firstResult = answerQuestion(start(), questions, {
+    questionId: questions[0].id, selectedOptionId: questions[0].correctOptionId,
+  });
+  const secondResult = answerQuestion(firstResult.game, questions, {
+    questionId: questions[1].id, selectedOptionId: questions[1].correctOptionId,
+  });
+  const retry = answerQuestion(secondResult.game, questions, {
+    questionId: questions[0].id, selectedOptionId: questions[0].correctOptionId,
+  });
+  assert.equal(retry.duplicate, true);
+  assert.equal(retry.response, firstResult.response);
+  assert.equal(retry.game.answers.length, 2);
+  assert.equal(retry.game.score, 20);
+});
+
+test('los IDs API de las preguntas son secuenciales aunque el banco fuente tenga otros IDs', () => {
+  assert.deepEqual(questions.slice(0, 3).map((question) => question.id), ['q-01', 'q-02', 'q-03']);
+  assert.deepEqual(questions.slice(0, 3).map((question) => question.sourceId), [1, 7, 12]);
 });

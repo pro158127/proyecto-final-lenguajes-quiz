@@ -1,7 +1,8 @@
 export class Question {
-  constructor(source) {
+  constructor(source, position = source.id) {
     this.sourceId = source.id;
-    this.id = `q-${String(source.id).padStart(2, '0')}`;
+    this.id = `q-${String(position).padStart(2, '0')}`;
+    this.position = position;
     this.region = source.region;
     this.term = source.palabra;
     this.prompt = source.pregunta;
