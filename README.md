@@ -1,29 +1,43 @@
 # Reto Quiz
 
-Aplicación web de trivia para el proyecto final de Lenguajes de Programación. La solución usará Next.js sobre Node.js y Supabase; se desplegará en Vercel dentro del plan gratuito.
+Trivia web sobre regionalismos de Colombia para el proyecto final de Lenguajes de Programación. Usa Next.js sobre Node.js, Supabase para persistencia y Vercel para despliegue.
 
-## Estado
+## Tema y preguntas
 
-Este repositorio contiene la definición de requisitos, la arquitectura propuesta y el roadmap inicial. El tema de las preguntas y el nombre del tercer integrante están pendientes de confirmación.
+El banco fuente contiene 37 preguntas en `src/data/regionalismos_colombia.json`. Cada partida básica usa las diez preguntas fijas listadas en `src/data/seleccion_partida.json`, cubriendo diez regiones. La puntuación del juego es 10 por acierto y 0 por error; se ignora el puntaje variable del archivo fuente.
 
-## Documentación
+## Requisitos
 
-- [Requisitos funcionales y no funcionales](docs/REQUISITOS.md)
-- [Arquitectura del programa](docs/ARQUITECTURA.md)
-- [Contratos entre módulos y API](docs/CONTRATOS_API.md)
-- [Roadmap y reparto](docs/ROADMAP.md)
+- Node.js 20.9 o superior.
+- Proyecto Supabase propio.
+- Variables `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` en `.env.local` para desarrollo y en el entorno de Vercel para despliegue. La clave de servicio solo se usa en el servidor; no la expongas ni la subas a Git.
 
-## Tecnologías acordadas
+## Instalación y ejecución
 
-- Next.js sobre Node.js para interfaz y rutas de API; pruebas con el ejecutor integrado de Node.js.
-- Supabase para persistencia de sesiones y resultados.
-- Vercel para despliegue gratuito.
-- Interfaz web con HTML, CSS y JavaScript del navegador, servida desde el proyecto Node.js.
+1. Instala dependencias con `npm ci`.
+2. Copia `.env.example` a `.env.local` y completa las credenciales del proyecto Supabase.
+3. Aplica el esquema de `supabase/migrations/20261121000000_quiz_schema.sql` en el proyecto Supabase.
+4. Ejecuta `npm run dev` y abre `http://localhost:3000`.
+
+La API usa las rutas descritas en [CONTRATOS_API.md](docs/CONTRATOS_API.md). Para una partida, llama a `POST /api/games`, `POST /api/games/{gameId}/answers` y `GET /api/leaderboard`.
+
+## Pruebas
+
+Ejecuta `npm test`. Las pruebas unitarias U1–U3 y las validaciones de alias y selección se ejecutan con el test runner integrado de Node.js, sin navegador ni conexión a Supabase.
+
+Los escenarios manuales P1–P7 deben registrarse en la tabla de pruebas del roadmap/README cuando la interfaz esté integrada. Aún no se han ejecutado.
 
 ## Equipo
 
-- Jordan Amesqueta: frontend.
-- Cristian David Sánchez Mosquera: backend y pruebas.
-- Tercer integrante: nombre pendiente; backend y pruebas.
+- Jordan Amezquita (`@amezquitaJordan`): frontend.
+- Cristian David Sánchez Mosquera (`@pro158127`): dominio, API y pruebas unitarias (implementación en PR #16).
+- Daniel Rueda (`@Danielrvasq`): conexión/configuración Supabase, clasificación, pruebas manuales P1–P7 y despliegue.
+- Jordan mantiene toda la implementación del frontend.
 
-Los nombres de usuario de GitHub de Jordan, Cristian y el tercer integrante están pendientes para poder asignarles formalmente las tareas.
+## Documentación
+
+- [Interfaces del frontend y llamadas API](docs/FRONTEND_INTERFACES.md)
+- [Requisitos](docs/REQUISITOS.md)
+- [Arquitectura y módulos](docs/ARQUITECTURA.md)
+- [Contratos de API](docs/CONTRATOS_API.md)
+- [Roadmap](docs/ROADMAP.md)

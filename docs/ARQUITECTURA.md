@@ -2,7 +2,7 @@
 
 ## Decisión general
 
-Aplicación web pequeña con Next.js sobre Node.js. Next.js sirve las páginas y expone Route Handlers HTTP como backend; Supabase proporciona la persistencia. Vercel despliega el proyecto. El tema y el banco son contenido versionado; no se necesita editor de preguntas.
+Aplicación web pequeña con Next.js sobre Node.js. Next.js sirve las páginas y expone Route Handlers HTTP como backend; Supabase proporciona la persistencia. Vercel despliega el proyecto. El tema es regionalismos de Colombia. El banco fuente y la selección fija de diez preguntas son contenido versionado; no se necesita editor de preguntas.
 
 ## Flujo principal
 
@@ -20,31 +20,40 @@ El backend valida y calcula el puntaje; no confía en un total calculado solo po
 ```text
 .
 ├── app/
-│   ├── page.tsx                         # Inicio y flujo de trivia
-│   ├── leaderboard/page.tsx             # Clasificación
+│   ├── page.js                           # Inicio
+│   ├── game/[gameId]/page.js             # Pregunta y retroalimentación
+│   ├── result/[gameId]/page.js           # Resultado final
+│   ├── leaderboard/page.js              # Clasificación
+│   ├── layout.js                         # Layout global
 │   └── api/
-│       ├── games/route.ts               # POST crear partida
-│       ├── games/[gameId]/route.ts      # GET estado de partida
-│       ├── games/[gameId]/answers/route.ts # POST confirmar respuesta
-│       └── leaderboard/route.ts         # GET top cinco
+│       ├── games/route.js               # POST crear partida
+│       ├── games/[gameId]/route.js      # GET estado de partida
+│       ├── games/[gameId]/answers/route.js # POST confirmar respuesta
+│       └── leaderboard/route.js         # GET top cinco
 ├── components/                          # Componentes de interfaz
-├── docs/                                # Requisitos, arquitectura y contratos
+├── docs/                                # Requisitos, arquitectura, contratos y pantallas
+├── supabase/migrations/                 # Esquema y funciones transaccionales
 ├── public/                              # Recursos estáticos propios
 ├── src/
-│   ├── client/api-client.ts             # Consumo tipado de la API desde UI
-│   ├── domain/                          # Pregunta, Partida y reglas puras
-│   ├── server/games/                    # Casos de uso de partida
-│   ├── server/leaderboard/              # Caso de uso de clasificación
-│   └── server/repositories/             # Interfaces e implementación Supabase
+│   ├── data/
+│   │   ├── regionalismos_colombia.json # Banco fuente (37 preguntas)
+│   │   └── seleccion_partida.json      # Diez IDs fijos por partida básica
+│   ├── client/api-client.js             # Consumo de la API desde UI
+│   ├── domain/                          # Validación, Pregunta, Partida y reglas puras
+│   └── server/
+│       ├── question-data.js             # Carga la selección fija de preguntas
+│       ├── supabase.js                  # Cliente servidor con clave privada
+│       ├── http.js                      # Errores y respuestas HTTP
+│       └── repositories/                # Acceso Supabase a sesiones/resultados
 ├── tests/unit/                          # Pruebas puras del dominio
-├── tests/api/                           # Pruebas de contratos de rutas
+├── tests/api/                           # Pruebas futuras de contratos HTTP
 ├── tests/manual/                        # Registro P1–P7
 ├── .env.example
 ├── package.json
 └── README.md
 ```
 
-Los Route Handlers usan runtime Node.js. Las páginas/componentes llaman al cliente API; solo el código `src/server` usa credenciales de Supabase. Evitar importar módulos `server` desde componentes de navegador.
+Los Route Handlers usan runtime Node.js. Las páginas/componentes llaman al cliente API definido en [FRONTEND_INTERFACES.md](FRONTEND_INTERFACES.md); solo el código `src/server` usa credenciales de Supabase. Evitar importar módulos `server` desde componentes de navegador.
 
 ## Módulos del proyecto
 
@@ -61,8 +70,8 @@ Los Route Handlers usan runtime Node.js. Las páginas/componentes llaman al clie
 
 ## Entidades y contratos
 
-- `Pregunta`: `id`, `prompt`, `options[4]`, `correctOptionIndex`, `position`. Método/regla para determinar si una opción es correcta.
-- `Partida`: `id`, `alias`, estado de pregunta, respuestas confirmadas, `correctCount`, `score`, `status`, fecha de creación. Solo acepta una confirmación por pregunta; finaliza al contestar diez.
+- `Question` (`Pregunta`): clase con ID, región, término, enunciado, cuatro opciones, respuesta correcta y explicación. `isCorrect()` evalúa la selección y `toPublic()` omite la solución antes de confirmar.
+- `Partida`: entidad con alias, diez preguntas, avance, respuestas y estado. Su método `answer()` valida el orden, evita duplicados, evalúa la respuesta y calcula el resultado al completar.
 - Servicio de juego: inicia sesión de juego, valida cada respuesta, devuelve retroalimentación y resume al final.
 - Repositorio de partidas: inserta finalizaciones de forma idempotente y consulta top cinco. Supabase queda detrás de esta interfaz para que la lógica de dominio no dependa del proveedor.
 
@@ -86,7 +95,7 @@ Consulta de clasificación: ordenar por `score DESC`, luego por `sequence ASC` (
 
 ## Configuración
 
-`.env.example` enumera solo nombres de variables, sin secretos. La configuración real va en variables de entorno locales ignoradas por Git y en los ajustes de Vercel. El nombre exacto de la variable de URL y las claves públicas/servidor se fija al implementar el cliente Supabase. El proyecto requiere Node.js 20.9 o superior para la versión actual de Next.js elegida.
+`.env.example` enumera solo nombres de variables, sin secretos. La configuración real va en variables de entorno locales ignoradas por Git y en los ajustes de Vercel. El backend usa `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY`; la clave de servicio permanece solo en el servidor. El proyecto requiere Node.js 20.9 o superior para la versión actual de Next.js elegida.
 
 ## Manejo de errores
 
@@ -98,6 +107,8 @@ Consulta de clasificación: ordenar por `score DESC`, luego por `sequence ASC` (
 
 ## Decisiones pendientes
 
-- Tema y nombre final de la trivia.
+- Nombre visual definitivo de la trivia.
 - Identificadores GitHub de integrantes para responsables formales.
-- Confirmar la expiración y política de limpieza de sesiones incompletas. La propuesta es guardar progreso temporal en Supabase; la partida incompleta no se inserta en `game_results` ni en el ranking.
+- Configurar credenciales Supabase y aplicar la migración en el proyecto del equipo.
+- Configurar Vercel para el repositorio y añadir variables de entorno.
+- Confirmar la política automática para limpiar sesiones expiradas.
