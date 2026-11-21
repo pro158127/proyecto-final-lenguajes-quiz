@@ -1,6 +1,6 @@
 # Reto Quiz
 
-Aplicación web de trivia para el proyecto final de Lenguajes de Programación. La solución usará Node.js y Supabase; se desplegará en Vercel dentro del plan gratuito.
+Aplicación web de trivia para el proyecto final de Lenguajes de Programación. La solución usará Next.js sobre Node.js y Supabase; se desplegará en Vercel dentro del plan gratuito.
 
 ## Estado
 
@@ -10,12 +10,13 @@ Este repositorio contiene la definición de requisitos, la arquitectura propuest
 
 - [Requisitos funcionales y no funcionales](docs/REQUISITOS.md)
 - [Arquitectura del programa](docs/ARQUITECTURA.md)
+- [Contratos entre módulos y API](docs/CONTRATOS_API.md)
 - [Roadmap y reparto](docs/ROADMAP.md)
 
 ## Tecnologías acordadas
 
-- Node.js para lógica de servidor y pruebas.
-- Supabase para persistencia de resultados.
+- Next.js sobre Node.js para interfaz y rutas de API; pruebas con el ejecutor integrado de Node.js.
+- Supabase para persistencia de sesiones y resultados.
 - Vercel para despliegue gratuito.
 - Interfaz web con HTML, CSS y JavaScript del navegador, servida desde el proyecto Node.js.
 

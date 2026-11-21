@@ -25,7 +25,7 @@ La aplicación permite que una persona juegue una trivia individual de diez preg
 
 | ID | Requisito | Criterio verificable |
 |---|---|---|
-| RNF-01 | Respetar las tecnologías acordadas. | La lógica de aplicación se ejecuta en Node.js, Supabase persiste resultados y Vercel aloja la aplicación. No se incorporan otros frameworks o servicios de base de datos sin decisión explícita del equipo. |
+| RNF-01 | Respetar las tecnologías acordadas. | La aplicación usa Next.js sobre Node.js, Supabase para persistencia y Vercel para despliegue. No se incorpora otra base de datos ni otro framework sin acuerdo del equipo. |
 | RNF-02 | Desplegar con el plan gratuito de Vercel. | La aplicación funciona en el entorno de Vercel sin depender de procesos persistentes; secretos y credenciales se configuran como variables de entorno, nunca se guardan en el repositorio. |
 | RNF-03 | Separar responsabilidades y mantener módulos pequeños. | Interfaz, dominio/reglas y persistencia se organizan por separado; la lógica de puntuación puede probarse sin navegador ni Supabase. |
 | RNF-04 | Usabilidad mínima. | Etiquetas y botones claros, texto legible, validación junto a la acción y navegación principal mediante teclado. La vista se comprueba también en ancho estrecho. |
@@ -60,3 +60,19 @@ El cliente no debe poder alterar el puntaje enviado y guardado sin validación d
 - **U1**: respuesta correcta incrementa aciertos en uno y puntaje en 10.
 - **U2**: respuesta incorrecta no incrementa aciertos ni puntaje.
 - **U3**: confirmar dos veces la respuesta de la misma pregunta no duplica puntos.
+
+
+## Organización por módulos
+
+| Módulo | Requisitos funcionales | Requisitos no funcionales y evidencia |
+|---|---|---|
+| Definición y contenido | RF-03 | RNF-07/08; diez preguntas revisadas y versionadas. |
+| Dominio del juego | RF-01, RF-02, RF-03, RF-05, RF-06, RF-07, RF-08, RF-12 | RNF-03/05/06; U1–U3 prueban reglas sin UI ni Supabase. |
+| Interfaz Next.js | RF-01, RF-02, RF-04, RF-05, RF-06, RF-08, RF-11, RF-12 | RNF-04/09; teclado, foco, etiquetas, viewport estrecho y estados de carga/error. |
+| API Next.js | RF-01 a RF-12 | RNF-03/05; validación de servidor, DTOs consistentes y errores HTTP documentados. |
+| Datos Supabase | RF-05, RF-06, RF-09, RF-10, RF-11 | RNF-05; idempotencia, recuperación, orden estable, manejo de fallos y claves protegidas. |
+| Pruebas y calidad | Validación transversal de RF-01 a RF-12 | RNF-06; U1–U3 automáticas y P1–P7 manuales con evidencia. |
+| Despliegue y entrega | RF-01 a RF-12 disponibles en versión desplegada | RNF-02/08; Vercel, README, ZIP limpio y demo reproducible. |
+| Gestión del equipo | No añade funciones de usuario | RNF-07 y rúbrica Git; más de seis commits útiles por integrante. |
+
+Los contratos HTTP entre la interfaz, las rutas de Next.js y la persistencia están especificados en [CONTRATOS_API.md](CONTRATOS_API.md).

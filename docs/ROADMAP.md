@@ -6,8 +6,8 @@
 
 | Integrante | Enfoque principal | Responsabilidades |
 |---|---|---|
-| Jordan Amesqueta | Frontend | Inicio/alias, preguntas y avance, resultado, clasificación, teclado y ventana estrecha; integración con endpoints. |
-| Cristian David Sánchez Mosquera | Backend y pruebas | Modelo y reglas de partida, validación de respuestas, cálculo de puntaje, endpoints y pruebas unitarias. |
+| Jordan Amesqueta | Frontend Next.js | Inicio/alias, preguntas y avance, resultado, clasificación, teclado y ventana estrecha; integración con endpoints. |
+| Cristian David Sánchez Mosquera | API Next.js y pruebas | Modelo y reglas de partida, validación de respuestas, cálculo de puntaje, endpoints y pruebas unitarias. |
 | Tercer integrante (nombre pendiente) | Backend y pruebas | Esquema y persistencia Supabase, clasificación/desempate, pruebas de integración/manuales, README y despliegue junto al equipo. |
 
 El reparto es una asignación inicial. El equipo debe acordar revisiones cruzadas y registrar cada aporte real en los commits y README.
@@ -26,6 +26,8 @@ El reparto es una asignación inicial. El equipo debe acordar revisiones cruzada
 | 3 dic. | Entrega y sustentación | Revisión final y demo de 6–8 minutos con participación de los tres integrantes. |
 
 ## Backlog para GitHub Projects
+
+El Project incluye campos de selección **Módulo** y **Fase** para filtrar las tareas por área y etapa. Las issues describen el responsable propuesto y los criterios de terminado; la asignación formal requiere usernames de GitHub.
 
 | Tarea | Fase | Responsable propuesto | Criterio de terminado |
 |---|---|---|---|
@@ -58,6 +60,6 @@ No crear commits vacíos ni dividir artificialmente un mismo cambio para inflar 
 ## Dependencias críticas
 
 - Elegir el tema antes de llenar el banco definitivo.
-- Acordar el contrato de endpoints antes de conectar frontend y backend.
+- Usar y mantener `CONTRATOS_API.md` antes de conectar interfaz y Route Handlers.
 - Definir política de acceso de Supabase antes de desplegar.
 - Resolver la identidad GitHub de los tres integrantes para asignar tareas formalmente.
